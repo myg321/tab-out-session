@@ -41,7 +41,7 @@ async function fetchOpenTabs() {
     const tabs = await chrome.tabs.query({});
     openTabs = tabs.map(t => ({
       id:       t.id,
-      url:      t.url,
+      url:      effectiveTabUrl(t),
       title:    t.title,
       windowId: t.windowId,
       active:   t.active,
@@ -2827,16 +2827,34 @@ document.addEventListener('drop', async (e) => {
 // instead of the URL fallback.
 
 let _missionRenderTimer = null;
+let _dashboardRenderInFlight = false;
+let _dashboardRenderQueued = false;
+
+function scheduleDashboardRender(delay = 1800) {
+  if (_missionRenderTimer) clearTimeout(_missionRenderTimer);
+  _missionRenderTimer = setTimeout(async () => {
+    if (_dashboardRenderInFlight) {
+      _dashboardRenderQueued = true;
+      return;
+    }
+
+    _dashboardRenderInFlight = true;
+    try {
+      await renderDashboard();
+    } finally {
+      _dashboardRenderInFlight = false;
+      if (_dashboardRenderQueued) {
+        _dashboardRenderQueued = false;
+        scheduleDashboardRender();
+      }
+    }
+  }, delay);
+}
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   // Only care about events that change what we render
   if (!changeInfo.title && !changeInfo.url && changeInfo.status !== 'complete') return;
-  if (_missionRenderTimer) clearTimeout(_missionRenderTimer);
-  _missionRenderTimer = setTimeout(async () => {
-    await fetchOpenTabs();
-    const m = await syncMissionWithOpenTabs();
-    missionUrlSet = new Set(m ? m.tabUrls : []);
-    await renderMissionSection();
-  }, 350);
+  scheduleDashboardRender();
 });
 
 // ─── Mission name input: Enter saves, Escape cancels, blur saves ────────────
