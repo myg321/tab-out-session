@@ -1,38 +1,33 @@
-# Tab Out
+# Tab Out Mission
 
-**Keep tabs on your tabs.**
+**A mission-focused Chrome new-tab dashboard for turning open tabs into intentional work.**
 
-Tab Out is a Chrome extension that replaces your new tab page with a dashboard of everything you have open. Tabs are grouped by domain, with homepages (Gmail, X, LinkedIn, etc.) pulled into their own group. Close tabs with a satisfying swoosh + confetti.
+Tab Out Mission is a local Chrome extension that replaces your new tab page with a dashboard of your current browser context. It keeps the original Tab Out idea of grouping open tabs by domain and saving tabs for later, then extends it with a mission-oriented workflow and Quick Notes.
 
 No server. No account. No external API calls. Just a local Chrome extension.
 
 ---
 
-## Install with a coding agent
+## Author
 
-Send your coding agent (Claude Code, Codex, etc.) the repo URL and say **"install this"**:
+Built by Longyue Cao / Logan-tree.
 
-```
-https://github.com/<owner>/<repo>
-```
-
-The agent will walk you through it. Takes about 1 minute.
+This project is based on Zara's original Tab Out extension. See [Acknowledgements](#acknowledgements).
 
 ---
 
 ## Features
 
-- **See all your tabs at a glance** on a clean grid, grouped by domain
-- **Homepages group** pulls Gmail inbox, X home, YouTube, LinkedIn, GitHub homepages into one card
-- **Close tabs with style** with swoosh sound + confetti burst
-- **Duplicate detection** flags when you have the same page open twice, with one-click cleanup
-- **Click any tab to jump to it** across windows, no new tab opened
-- **Save for later** bookmark tabs to a checklist before closing them
-- **Quick Notes** capture short mission ideas locally in the new-tab page
-- **Localhost grouping** shows port numbers next to each tab so you can tell your vibe coding projects apart
-- **Expandable groups** show the first 8 tabs with a clickable "+N more"
-- **100% local** your data never leaves your machine
-- **Pure Chrome extension** no server, no Node.js, no npm, no setup beyond loading the extension
+- **Open tabs dashboard** — see your current tabs grouped by domain
+- **Homepage grouping** — group common homepages such as Gmail, X, LinkedIn, YouTube, and GitHub
+- **Mission workflow** — move selected tabs into a focused mission so the current work context is explicit
+- **Quick Notes** — capture short mission ideas locally in the new-tab page
+- **Saved for later** — save individual tabs to a local checklist before closing them
+- **Duplicate detection** — identify repeated pages and close duplicates quickly
+- **Cross-window tab jumping** — click a tab title to jump to it across Chrome windows
+- **Localhost grouping** — show port numbers for local development tabs
+- **Confetti and sound feedback** — closing tabs and completing missions gives lightweight visual feedback
+- **100% local** — your tabs, saved items, and notes stay on your machine
 
 ---
 
@@ -41,62 +36,62 @@ The agent will walk you through it. Takes about 1 minute.
 **1. Clone the repo**
 
 ```bash
-git clone https://github.com/<owner>/<repo>.git
+git clone https://github.com/Logan-tree/tab-out-mission-longyue.git
 ```
 
 **2. Load the Chrome extension**
 
 1. Open Chrome and go to `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle)
+2. Enable **Developer mode**
 3. Click **Load unpacked**
-4. Navigate to the `extension/` folder inside the cloned repo and select it
+4. Select the `extension/` folder inside this repo
 
 **3. Open a new tab**
 
-You'll see Tab Out.
+You should see Tab Out Mission.
 
 ---
 
-## How it works
+## How It Works
 
-```
+```text
 You open a new tab
-  -> Tab Out shows your open tabs grouped by domain
-  -> Homepages (Gmail, X, etc.) get their own group at the top
-  -> Click any tab title to jump to it
-  -> Close groups you're done with (swoosh + confetti)
-  -> Save tabs for later before closing them
+  -> Tab Out Mission shows your open tabs grouped by domain
+  -> You move relevant tabs into a mission
+  -> You capture small ideas in Quick Notes
+  -> You save useful tabs for later
+  -> You close or complete tab groups when the context is done
 ```
 
-Everything runs inside the Chrome extension. No external server, no API calls, no data sent anywhere. Saved tabs are stored in `chrome.storage.local`.
+Everything runs inside the Chrome extension. User data is stored locally through `chrome.storage.local`.
+
+---
 
 ## Privacy
 
-Tab Out does not send your tabs, notes, or saved items to a server. The extension stores user data locally through Chrome extension storage.
+Tab Out Mission does not send your tabs, notes, or saved items to a server. The extension does not require an account and does not call an external API.
+
+---
 
 ## Acknowledgements
 
 Tab Out Mission is built on top of Zara's original Tab Out extension, which focused on two core blocks: open tabs and saved-for-later tabs.
 
-This version extends that foundation with a mission-oriented workflow and Quick Notes.
+This version extends that foundation with a mission-oriented workflow, Quick Notes, and a more personal new-tab operating surface.
 
 ---
 
-## Tech stack
+## Tech Stack
 
 | What | How |
 |------|-----|
 | Extension | Chrome Manifest V3 |
-| Storage | chrome.storage.local |
-| Sound | Web Audio API (synthesized, no files) |
-| Animations | CSS transitions + JS confetti particles |
+| Storage | `chrome.storage.local` |
+| Sound | Web Audio API |
+| Animations | CSS transitions + JavaScript confetti particles |
 
 ---
 
 ## License
 
 MIT
-
----
-
-Built by [Zara](https://x.com/zarazhangrui)
