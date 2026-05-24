@@ -74,6 +74,12 @@ Everything runs inside the Chrome extension. No external server, no API calls, n
 
 Tab Out does not send your tabs, notes, or saved items to a server. The extension stores user data locally through Chrome extension storage.
 
+## Acknowledgements
+
+Tab Out Mission is built on top of Zara's original Tab Out extension, which focused on two core blocks: open tabs and saved-for-later tabs.
+
+This version extends that foundation with a mission-oriented workflow and Quick Notes.
+
 ---
 
 ## Tech stack
