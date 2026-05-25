@@ -33,20 +33,31 @@ This project is based on Zara's original Tab Out extension. See [Acknowledgement
 
 ## Manual Setup
 
-**1. Clone the repo**
+**Option A: Clone the repo yourself**
 
 ```bash
 git clone https://github.com/Logan-tree/tab-out-mission.git
 ```
 
-**2. Load the Chrome extension**
+**Option B: Ask your coding agent to prepare it**
+
+If you use a local coding agent, you can ask it:
+
+```text
+Download this Chrome extension repo and prepare it for local installation:
+https://github.com/Logan-tree/tab-out-mission
+```
+
+The agent can clone or download the repo for you, but Chrome still requires you to load the extension manually.
+
+**Load the Chrome extension**
 
 1. Open Chrome and go to `chrome://extensions`
 2. Enable **Developer mode**
 3. Click **Load unpacked**
 4. Select the `extension/` folder inside this repo
 
-**3. Open a new tab**
+**Open a new tab**
 
 You should see Tab Out Mission.
 
