@@ -215,15 +215,19 @@ export function mergeSyncPayloads(
     }
   });
 
-  // 3. SaveForLater Merge (by URL, completed: true wins)
+  // 3. SaveForLater Merge (by URL, newest updatedAt/completedAt wins)
   const sflMap = new Map<string, SaveForLaterTab>();
   localData.saveForLater.forEach(t => sflMap.set(t.url, t));
   (remoteData.saveForLater || []).forEach(rt => {
     const existing = sflMap.get(rt.url);
     if (!existing) {
       sflMap.set(rt.url, rt);
-    } else if (rt.completed && !existing.completed) {
-      sflMap.set(rt.url, rt);
+    } else {
+      const localTime = existing.updatedAt || existing.completedAt || 0;
+      const remoteTime = rt.updatedAt || rt.completedAt || 0;
+      if (remoteTime > localTime) {
+        sflMap.set(rt.url, rt);
+      }
     }
   });
 

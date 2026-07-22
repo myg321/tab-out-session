@@ -407,7 +407,8 @@ export const useStore = create<Store>((set, get) => ({
   addToSaveForLater: async (tab) => {
     const current = get().saveForLater;
     const filtered = current.filter(t => t.url !== tab.url);
-    const newItem: SaveForLaterTab = { ...tab, completed: false };
+    const now = Date.now();
+    const newItem: SaveForLaterTab = { ...tab, completed: false, updatedAt: now };
     const order = get().settings.itemAppendOrder?.saveForLater || 'end';
     const saveForLater = order === 'front' ? [newItem, ...filtered] : [...filtered, newItem];
     set({ saveForLater });
@@ -421,35 +422,43 @@ export const useStore = create<Store>((set, get) => ({
   },
 
   markCompleted: async (url) => {
+    const now = Date.now();
     const saveForLater = get().saveForLater.map(t => 
-      t.url === url ? { ...t, completed: true, completedAt: Date.now() } : t
+      t.url === url ? { ...t, completed: true, completedAt: now, updatedAt: now } : t
     );
+    set({ saveForLater });
     if (typeof chrome !== 'undefined' && chrome.storage) {
       await chrome.storage.local.set({ saveForLater });
-    } else {
-      set({ saveForLater });
+    }
+    if (get().syncConfig?.token) {
+      get().uploadToCloud({ showToast: false });
     }
   },
 
   unmarkCompleted: async (url) => {
+    const now = Date.now();
     const saveForLater = get().saveForLater.map(t => 
-      t.url === url ? { ...t, completed: false, completedAt: undefined } : t
+      t.url === url ? { ...t, completed: false, completedAt: undefined, updatedAt: now } : t
     );
+    set({ saveForLater });
     if (typeof chrome !== 'undefined' && chrome.storage) {
       await chrome.storage.local.set({ saveForLater });
-    } else {
-      set({ saveForLater });
+    }
+    if (get().syncConfig?.token) {
+      get().uploadToCloud({ showToast: false });
     }
   },
 
   clearCompleted: async () => {
     const saveForLater = get().saveForLater.filter(t => !t.completed);
+    set({ saveForLater });
     if (typeof chrome !== 'undefined' && chrome.storage) {
       await chrome.storage.local.set({ saveForLater });
-    } else {
-      set({ saveForLater });
     }
     get().showToast(`Cleared completed tabs`);
+    if (get().syncConfig?.token) {
+      get().uploadToCloud({ showToast: false });
+    }
   },
 
   cacheFavicon: async (domain, iconUrl) => {

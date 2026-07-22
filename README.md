@@ -1,5 +1,3 @@
-# Tab Out Session
-
 <div align="center">
 
 # 🌿 Tab Out Session

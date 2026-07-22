@@ -9,6 +9,7 @@ export interface SavedTab {
 export interface SaveForLaterTab extends SavedTab {
   completed: boolean;
   completedAt?: number;
+  updatedAt?: number;
 }
 
 export interface Session {
