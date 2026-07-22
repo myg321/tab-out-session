@@ -1,0 +1,159 @@
+.popup {
+  border-radius: 0;        /* Chrome forces straight corners anyway */
+  padding: 16px;
+  width: 300px;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  min-height: auto;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.tabHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.tabTitle {
+  font-size: 13px;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--color-muted);
+  margin: 10px 0 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.sessionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 8px;
+  border-radius: 6px;
+  cursor: default;
+  transition: background 0.1s;
+}
+.sessionRow:hover { background: var(--color-surface-soft); }
+
+.sessionLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sessionName {
+  font-size: 13px;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Add button - coral color, visible in both modes */
+.addBtn {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: background 0.1s;
+}
+.addBtn:hover { background: rgba(204, 120, 92, 0.08); }
+
+.checkmark { color: var(--color-primary); flex-shrink: 0; }
+
+.noOther {
+  font-size: 12px;
+  color: var(--color-muted);
+  padding: 8px;
+  text-align: center;
+}
+
+.emptyState {
+  font-size: 13px;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 8px 0;
+  line-height: 1.5;
+}
+
+.saveForLaterRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  margin-top: 8px;
+  border-top: 1px solid var(--color-hairline);
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--color-ink);
+  transition: background 0.1s;
+}
+.saveForLaterRow:hover { background: var(--color-surface-soft); }
+
+/* State C - newtab */
+.newtabState {
+  padding: 4px 0;
+}
+.newtabTitle {
+  font-family: var(--font-display, 'Cormorant Garamond', serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--color-ink);
+  margin: 0 0 4px;
+}
+.newtabSubtitle {
+  font-size: 13px;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+:global(html.dark), :global(html.dark body) {
+  background: #1a1815;  /* dark mode canvas */
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-ink);
+  color: var(--color-canvas);
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  z-index: 9999;
+}

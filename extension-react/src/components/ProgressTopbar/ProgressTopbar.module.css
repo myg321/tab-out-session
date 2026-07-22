@@ -1,0 +1,124 @@
+.topbar {
+  background: var(--color-canvas);
+  border-bottom: 1px solid var(--color-hairline);
+  padding: 0 40px;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.morse {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.weekInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.weekMarkers { display: flex; gap: 4px; }
+
+.weekMarker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.weekMarker span:first-child { color: var(--color-muted); }
+
+.dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-muted);
+}
+
+.past .dot { background: var(--color-hairline); opacity: 1; }
+.past span:first-child { color: var(--color-hairline-soft); }
+.current span:first-child { color: var(--color-primary) !important; }
+.current .dot { background: var(--color-primary) !important; }
+.future span:first-child { color: var(--color-hairline); }
+.future .dot { background: var(--color-hairline); opacity: 0.5; }
+
+.yearTrackContainer { flex: 1; position: relative; overflow: visible; }
+
+.yearTrack {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 16px;
+}
+
+.yearMark {
+  flex: 1;
+  height: 3px;
+  border-radius: 1px;
+  background: var(--color-hairline);
+}
+
+.yearMark.past { background: var(--color-muted-soft); opacity: 0.5; }
+.yearMark.current { background: var(--color-primary) !important; width: 3px !important; flex: none; }
+.yearMark.future { background: var(--color-hairline-soft); opacity: 0.5; }
+.yearMark.monthStart { height: 8px; background: var(--color-muted-soft); }
+.yearMark.past.monthStart { background: var(--color-muted-soft); }
+
+.pointer {
+  position: absolute;
+  top: -18px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 0.5px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.pointerArrow { text-align: center; font-size: 8px; color: var(--color-primary); }
+
+.months {
+  position: relative;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.months span {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--color-muted);
+  transform: translateX(-50%);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}

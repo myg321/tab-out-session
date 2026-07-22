@@ -3,3 +3,7 @@ config.local.js
 extension/morning.json
 *.log
 video-projects/
+node_modules/
+dist/
+extension-react/node_modules/
+extension-react/dist/

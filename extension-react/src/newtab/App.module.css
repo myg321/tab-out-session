@@ -1,0 +1,16 @@
+.pageBody {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+
+.contentRow {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.mainColumn {
+  flex: 1;
+  min-width: 0;
+}

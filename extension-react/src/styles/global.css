@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&family=Lora:ital@1&display=swap');
+
+:root {
+  /* ── Claude/Anthropic Design Tokens ── */
+  --color-canvas: #faf9f5;
+  --color-surface-soft: #f5f0e8;
+  --color-surface-card: #efe9de;
+  --color-surface-cream-strong: #e8e0d2;
+  --color-surface-dark: #181715;
+  --color-surface-dark-elevated: #252320;
+  --color-surface-dark-soft: #1f1e1b;
+
+  --color-primary: #cc785c;
+  --color-primary-active: #a9583e;
+  --color-primary-disabled: #e6dfd8;
+
+  --color-ink: #141413;
+  --color-body-strong: #252523;
+  --color-body: #3d3d3a;
+  --color-muted: #6c6a64;
+  --color-muted-soft: #8e8b82;
+
+  --color-hairline: #e6dfd8;
+  --color-hairline-soft: #ebe6df;
+
+  --color-on-dark: #faf9f5;
+  --color-on-dark-soft: #a09d96;
+
+  --color-accent-teal: #5db8a6;
+  --color-accent-amber: #e8a55a;
+  --color-success: #5db872;
+  --color-warning: #d4a017;
+  --color-error: #c64545;
+
+  /* ── Semantic aliases for components ── */
+  --paper: var(--color-canvas);
+  --ink: var(--color-ink);
+  --muted: var(--color-muted);
+  --card-bg: var(--color-surface-soft);
+  --warm-gray: var(--color-hairline);
+  --shadow: rgba(20, 20, 19, 0.08);
+  --accent-amber: var(--color-primary);
+  --status-abandoned: var(--color-error);
+  --status-cooling: var(--color-primary-active);
+
+  /* ── Typography ── */
+  --font-display: 'Cormorant Garamond', 'Tiempos Headline', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ── Radius ── */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
+}
+
+/* ── Dark Mode ── */
+.dark {
+  --color-canvas: #1a1815;
+  --color-ink: #f0ece6;
+  --color-muted: #8e8b82;
+  --color-surface-soft: #252220;
+  --color-surface-card: #2e2b28;
+  --color-hairline: #33302d;
+  --color-hairline-soft: #2a2825;
+  --shadow: rgba(0,0,0,0.3);
+  
+  --color-surface-cream-strong: #2e2b27;
+  --color-body-strong: #e8e4de;
+  --color-body: #c8c4be;
+  --color-muted-soft: #7a776f;
+  
+  --paper: var(--color-canvas);
+  --card-bg: var(--color-surface-soft);
+  --warm-gray: var(--color-hairline);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: var(--font-sans);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}

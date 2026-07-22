@@ -1,0 +1,104 @@
+.container { margin-top: 32px; }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0;
+  padding-bottom: 8px;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--color-muted);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.headerLine {
+  flex: 1;
+  height: 1px;
+  background: var(--color-hairline);
+}
+
+.chevron { color: var(--color-muted); display: flex; align-items: center; }
+
+.count {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.emptyBtn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+.emptyBtn:hover { border-color: var(--color-error); color: var(--color-error); }
+.emptyBtnConfirm { border-color: var(--color-error); color: var(--color-error); font-weight: 600; }
+
+.list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+}
+
+.itemInfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.itemName { font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--color-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.itemMeta { font-family: var(--font-sans); font-size: 11px; color: var(--color-muted); }
+
+.itemActions { display: flex; gap: 6px; flex-shrink: 0; margin-left: 12px; }
+
+.restoreBtn {
+  display: flex;
+  align-items: center;   /* Icon + text vertically centered */
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.restoreBtn:hover { border-color: var(--color-muted); }
+
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.deleteBtn:hover { border-color: var(--color-error); color: var(--color-error); }

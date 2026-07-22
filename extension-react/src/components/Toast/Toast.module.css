@@ -1,0 +1,41 @@
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-16px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100000 !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(14,14,16,0.25);
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.iconSuccess {
+  color: #10b981;
+  font-size: 16px;
+}
+
+.iconError {
+  color: #ef4444;
+  font-size: 16px;
+}
+
+.iconWarning {
+  color: #f59e0b;
+  font-size: 16px;
+}

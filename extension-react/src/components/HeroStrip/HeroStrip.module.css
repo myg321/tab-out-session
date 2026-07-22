@@ -1,0 +1,51 @@
+.heroStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 26px;
+  margin-bottom: 0;
+}
+
+.timeArea {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.clock {
+  font-family: 'Lora', 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  color: var(--color-ink);
+}
+
+.colon {
+  display: inline-block;
+  transform: translateY(-4px);
+  font-style: italic;
+  margin: 0 1px;
+}
+
+.date {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.3px;
+  color: var(--color-muted);
+}
+
+.meta {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-muted-soft);
+  letter-spacing: 0.3px;
+}
+
+.dupe {
+  color: var(--color-error);
+}

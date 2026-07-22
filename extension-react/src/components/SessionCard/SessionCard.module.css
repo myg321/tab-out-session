@@ -1,0 +1,369 @@
+/* Card — overflow must NOT be hidden so fixed-position dropdown can float above */
+.card {
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  position: relative;
+  transition: box-shadow 0.15s, transform 0.15s;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: 0 2px 8px var(--shadow);
+  transform: translateY(-1px);
+}
+
+.card.tabDragOver {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px var(--color-primary), 0 4px 16px rgba(20,20,19,0.12) !important;
+  background: var(--color-canvas) !important;
+}
+
+/* 3px colored top stripe using CSS variable set inline by React */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--session-color, var(--muted));
+  border-radius: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -16px;
+  padding-top: 16px;
+  margin-bottom: 8px;
+  cursor: grab;
+}
+.header:active {
+  cursor: grabbing;
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.tabCount {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted);
+  min-width: 16px;
+  text-align: right;
+  margin-right: 4px;
+}
+
+.segmentedControlPill {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  padding: 1px;
+  gap: 1px;
+}
+
+.pillSegmentBtn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-muted);
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
+}
+.pillSegmentBtn:hover {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  box-shadow: 0 1px 3px rgba(20,20,19,0.1);
+}
+
+/* Color dot next to session name — inherits --session-color */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.tabRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  background: transparent;
+  border-bottom: none;
+  transition: background 0.1s;
+  position: relative;
+}
+.tabRow:last-child { border-bottom: none; }
+.tabRow:hover { background: var(--color-surface-soft); }
+
+.tabDragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.tabDropIndicatorBefore {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tabDropIndicatorAfter {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tabRow .iconBtn {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.tabRow:hover .iconBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.favicon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.tabTitle {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.4;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.tabTitle:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+}
+
+.moreBtn {
+  font-size: 12px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+.moreBtn:hover { color: var(--ink); }
+
+.actions {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-hairline);
+  padding: 0;
+  margin-top: 8px;
+  /* Break out of card's 16px padding to reach edges */
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-bottom: -16px;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.actionBtn:hover {
+  color: var(--color-ink);
+  background: var(--color-surface-soft);
+}
+.actionBtn + .actionBtn {
+  border-left: 1px solid var(--color-hairline);
+}
+
+.collapseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  padding: 0;
+  margin: 0;
+}
+.collapseBtn:hover {
+  color: var(--color-ink);
+  background: rgba(26, 22, 19, 0.05);
+}
+
+.renameInput {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0 4px;
+  outline: none;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  flex: 1;
+  min-width: 0;
+}
+
+.iconBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.iconBtn:hover {
+  background: rgba(26, 22, 19, 0.05);
+  color: var(--color-ink);
+}
+
+/* ─── Dropdown: position:fixed is set inline by React ─── */
+.dropdownMenu {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(20,20,19,0.12);
+  min-width: 172px;
+  z-index: 9000;
+  padding: 4px;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+.dropdownItem:hover {
+  background: rgba(26,22,19,0.05);
+}
+
+.dropdownDanger { color: var(--color-error); }
+.dropdownDanger:hover { background: rgba(179,90,90,0.08); color: var(--color-error); }
+
+.dropdownDangerConfirm {
+  background: rgba(179,90,90,0.12) !important;
+  color: var(--color-error) !important;
+  font-weight: 600;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--warm-gray);
+  margin: 4px 0;
+}
+
+/* ─── Color picker swatches inside dropdown ─── */
+.dropdownColors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 6px 10px;
+}
+
+.colorDot {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s;
+  /* background is set inline via style prop */
+}
+.colorDot:hover { transform: scale(1.15); }
+.colorSelected {
+  border-color: var(--ink) !important;
+  box-shadow: 0 0 0 1px var(--ink);
+}
