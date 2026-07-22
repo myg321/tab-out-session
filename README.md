@@ -28,6 +28,7 @@ Most tab managers operate as separate, disconnected popup menus or cluttered boo
 ### Key Value Pillars
 
 - 🗂️ **Session Management First**: Store, categorize, and restore tab collections seamlessly with an adaptive 3-state accordion system.
+- ⚡ **Instant Extension Toolbar Popup**: Park any active webpage directly into a Session or Save for Later with one click from the Chrome toolbar.
 - 🔐 **Encrypted Cloud Sync**: Sync all sessions, quick sites, and settings across machines via encrypted GitHub Gists — no middleman servers, no accounts, 100% user-owned.
 - 🎨 **Harmonious & Refined Design System**:
   - **Automatic Light/Dark Mode**: Seamlessly adapts to your system OS appearance.
@@ -65,7 +66,12 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
 - **Flexible Restoration**: Restore entire sessions in your current window or spin up a dedicated Chrome window.
 - **30-Day Trash Retention**: Accidental session deletions move to a local Trash Bin with 30-day retention and one-click restoration.
 
-### 2. 🔐 Encrypted GitHub Gist Cloud Sync
+### 2. ⚡ Instant Extension Toolbar Popup
+- **On-the-Fly Tab Parking**: Click the **Tab Out Session** icon in your Chrome extensions toolbar anytime while browsing to park your current webpage instantly.
+- **One-Click Destination Selection**: Save the active tab directly into any existing Session, stash it into "Save for Later", or create a brand new Session on the fly without interrupting your browsing flow.
+- **Instant Real-Time Sync**: Parking a tab via the popup updates `chrome.storage.local` immediately, ensuring your New Tab dashboard is instantly in sync across all windows.
+
+### 3. 🔐 Encrypted GitHub Gist Cloud Sync
 - **Zero Middleman Servers**: Connect directly from your browser to GitHub's REST API using a standard Personal Access Token (PAT).
 - **Secret Gist Storage**: Data is saved into an isolated, secret GitHub Gist (`tab-out-session-data.json`), giving you 100% control over your personal data.
 - **Bi-directional Merging & Tombstones**: Intelligent conflict resolution synchronizes Sessions, Quick Sites, Save for Later items, and user Settings across multiple computers without resurrecting deleted items.
