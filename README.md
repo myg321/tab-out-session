@@ -28,8 +28,9 @@ Most tab managers operate as separate, disconnected popup menus or cluttered boo
 ### Key Value Pillars
 
 - 🗂️ **Session Management First**: Store, categorize, and restore tab collections seamlessly with an adaptive 3-state accordion system.
+- 🖐️ **Universal Drag-and-Drop Customization**: Effortlessly reorder Session cards, intra-Session links, Save for Later reading items, and Quick Sites tiles via native drag-and-drop.
 - ⚡ **Instant Extension Toolbar Popup**: Park any active webpage directly into a Session or Save for Later with one click from the Chrome toolbar.
-- 🔐 **Encrypted Cloud Sync**: Sync all sessions, quick sites, and settings across machines via encrypted GitHub Gists — no middleman servers, no accounts, 100% user-owned.
+- 🔐 **Encrypted Cloud Sync**: Sync all sessions, custom reorder positions, quick sites, and settings across machines via encrypted GitHub Gists — no middleman servers, no accounts, 100% user-owned.
 - 🎨 **Harmonious & Refined Design System**:
   - **Automatic Light/Dark Mode**: Seamlessly adapts to your system OS appearance.
   - **Cohesive Typography & Earth Tones**: Curated Fraunces display typography paired with warm canvas palettes.
@@ -62,6 +63,9 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
   1. 📁 **Collapsed State**: Sleek 1-line header bar with title, color tag, and tab count.
   2. 🔍 **Partial Preview State**: Displays the top 3 primary tabs for quick context scanning without taking up full vertical space.
   3. 📂 **Full Expanded State**: Complete list of saved links with single tab deletion, copy URL, and drag ordering.
+- **Card & Tab Drag-and-Drop Reordering**:
+  - 🤏 **Card Reordering**: Drag any Session card by its title bar to rearrange your session grid.
+  - 🔀 **Intra-Session Tab Reordering**: Drag saved links within a Session card to re-order your reading or workflow sequence.
 - **Earth & Gem Color Tagging**: Organize work, research, personal, and project sessions using 8 curated color palettes (`clay`, `sage`, `slate`, `terra`, `rose`, `moss`, `indigo`, `sand`).
 - **Flexible Restoration**: Restore entire sessions in your current window or spin up a dedicated Chrome window.
 - **30-Day Trash Retention**: Accidental session deletions move to a local Trash Bin with 30-day retention and one-click restoration.
@@ -74,10 +78,10 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
 ### 3. 🔐 Encrypted GitHub Gist Cloud Sync
 - **Zero Middleman Servers**: Connect directly from your browser to GitHub's REST API using a standard Personal Access Token (PAT).
 - **Secret Gist Storage**: Data is saved into an isolated, secret GitHub Gist (`tab-out-session-data.json`), giving you 100% control over your personal data.
-- **Bi-directional Merging & Tombstones**: Intelligent conflict resolution synchronizes Sessions, Quick Sites, Save for Later items, and user Settings across multiple computers without resurrecting deleted items.
+- **Bi-directional State & Order Merging**: Synchronizes Sessions, custom drag-and-drop order positions, Quick Sites, Save for Later items, and user Settings across multiple computers without resurrecting deleted items.
 - **Live Status Indicator**: Visual header badge reflecting real-time sync state (`Synced`, `Syncing`, `Sync error`).
 
-### 3. 🌐 Open Tabs Domain Grouping
+### 4. 🌐 Open Tabs Domain Grouping
 - **Smart Auto-Grouping**: Automatically aggregates all open tabs across Chrome windows by domain name, host, and port (including full `localhost:PORT` distinction for developers).
 - **One-Click Batch Actions**:
   - 📥 **Save to Session**: Turn any domain tab group into a permanent, named session.
@@ -85,18 +89,19 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
   - ❌ **Close Group**: Safely close all tabs in a domain group after saving.
 - **Cross-Window Tab Focus**: Click any tab title to instantly focus and bring that specific Chrome tab/window to the foreground.
 
-### 4. ⚡ Quick Sites Tile System
-- **Custom Canvas Cropper**: Built-in HTML5 canvas cropper tool that lets you crop, scale, and adjust custom icon upload images for your bookmarks.
-- **Adaptive Tile Geometry**: Switch seamlessly between **Squircle** (Apple-style continuous curvature) and **Circle** tile styles.
-- **Color Backfilling**: Preset color swatches and EyeDropper color picker for transparent PNGs.
+### 5. ⚡ Quick Sites Tile System & Icon Studio
+- **Custom Image Upload & URL Address Fetching**: Upload local image files or paste any public image URL address to fetch custom icons.
+- **Interactive Canvas Cropper**: Integrated HTML5 canvas cropper tool that lets you crop, scale, pan, mask (**Squircle** or **Circle** shapes), and fill custom background colors for clean PNG transparency.
+- **Tile Drag-and-Drop Reordering**: Drag tiles freely to customize your tile grid layout to match your browsing habits.
 - **Offline Base64 Caching**: Icons are converted into optimized Base64 Data URLs and saved directly in `chrome.storage.local`, ensuring 100% reliable displays even when completely offline.
 
-### 5. ✍️ Save for Later Checklist
+### 6. ✍️ Save for Later Checklist
 - **Frictionless Reading Stash**: Quick-add temporary URLs and reading items without polluting your long-term bookmark tree.
+- **Drag-and-Drop Reordering**: Drag reading items up and down to prioritize your reading queue.
 - **Handwritten Fountain Pen Strikethrough**: Checking off a completed item triggers a multi-line SVG pen stroke animation (`strikeThroughMultiLine`) across text lines, followed by a smooth slide-down archiving effect.
 - **Completed Archive**: Filter and clear completed items effortlessly.
 
-### 6. ⌛ Year Progress Topbar & Serif Clock
+### 7. ⌛ Year Progress Topbar & Serif Clock
 - **Temporal Context**: Integrated real-time timeline displaying the exact percentage of the current year elapsed (`YEAR PROGRESS: XX.X%`), inherited from Tab Out Mission.
 - **Editorial Typography**: Elegant display clock powered by the classic **Fraunces** serif font family.
 
