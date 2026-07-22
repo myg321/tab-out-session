@@ -1,108 +1,230 @@
-# Tab Out Mission
+# Tab Out Session
 
-**A mission-focused Chrome new-tab dashboard for turning open tabs into intentional work.**
+<div align="center">
 
-Tab Out Mission is a local Chrome extension that replaces your new tab page with a dashboard of your current browser context. It keeps the original Tab Out idea of grouping open tabs by domain and saving tabs for later, then extends it with a mission-oriented workflow and Quick Notes.
+# 🌿 Tab Out Session
 
-No server. No account. No external API calls. Just a local Chrome extension.
+**Transforming Tab Overload into Intentional, Focused Workflows.**
 
----
+A high-performance Chrome Manifest V3 New Tab extension built for focus, domain-level tab organization, and seamless session management.
 
-## Author
+[![Manifest V3](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/intro/)
+[![React 18](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.3-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-success.svg?style=flat-square)](./LICENSE)
+[![Privacy First](https://img.shields.io/badge/Privacy-100%25_Local_%26_Encrypted-emerald?style=flat-square)](https://github.com/myg321/tab-out-session#privacy--security)
 
-Built by [Logan-tree](https://github.com/Logan-tree).
-
-This project is based on Zara's original Tab Out extension. See [Acknowledgements](#acknowledgements).
-
----
-
-## Features
-
-- **Open tabs dashboard** — see your current tabs grouped by domain
-- **Homepage grouping** — group common homepages such as Gmail, X, LinkedIn, YouTube, and GitHub
-- **Mission workflow** — move selected tabs into a focused mission so the current work context is explicit
-- **Quick Notes** — capture short mission ideas locally in the new-tab page
-- **Saved for later** — save individual tabs to a local checklist before closing them
-- **New-tab cleanup** — keep one Tab Out Mission new tab and close any extra new-tab duplicates
-- **Cross-window tab jumping** — click a tab title to jump to it across Chrome windows
-- **Localhost grouping** — show port numbers for local development tabs
-- **Confetti and sound feedback** — closing tabs and completing missions gives lightweight visual feedback
-- **100% local** — your tabs, saved items, and notes stay on your machine
+</div>
 
 ---
 
-## Manual Setup
+## 📖 Product Positioning
 
-**Option A: Clone the repo yourself**
+**Tab Out Session** reimagines the browser's New Tab page into an editorial, human-centered dashboard that cures tab sprawl. Forked from [Tab Out Mission](https://github.com/Logan-tree/tab-out-mission) (which adapted Zara's original Tab Out concept), it combines the beloved **Year Progress topbar** with modern **Session Management** and **Bookmark Buddy** productivity workflows.
+
+Most tab managers operate as separate, disconnected popup menus or cluttered bookmark lists. **Tab Out Session** turns every new tab into an active work surface, helping knowledge workers, developers, and researchers structure chaotic browsing contexts into intentional, color-coded work sessions.
+
+### Key Value Pillars
+
+- 🗂️ **Session Management First**: Store, categorize, and restore tab collections seamlessly with an adaptive 3-state accordion system.
+- 🔐 **Encrypted Cloud Sync**: Sync all sessions, quick sites, and settings across machines via encrypted GitHub Gists — no middleman servers, no accounts, 100% user-owned.
+- 🎨 **Harmonious & Refined Design System**:
+  - **Automatic Light/Dark Mode**: Seamlessly adapts to your system OS appearance.
+  - **Cohesive Typography & Earth Tones**: Curated Fraunces display typography paired with warm canvas palettes.
+  - **Delightful Micro-interactions**: Subtle touches like handwritten fountain pen strikethrough animations when completing reading items.
+- 🎯 **Domain-Level Tab Control**: Group active tabs automatically by domain name, eliminate duplicates across windows, and batch save entire clusters.
+- ⏳ **Temporal Grounding**: Maintain acute awareness of time with the Year Progress topbar inherited from Tab Out Mission.
+
+---
+
+## 🖼️ Visual Preview
+
+Below is the complete dashboard interface of **Tab Out Session** showing all core features in Light Mode and Dark Mode.
+
+### Light Mode (Warm Canvas Theme)
+
+![Tab Out Session Light Mode](./docs/screenshots/tab-out-session-light.png)
+
+---
+
+### Dark Mode (Midnight Theme)
+
+![Tab Out Session Dark Mode](./docs/screenshots/tab-out-session-dark.png)
+
+---
+
+## ✨ Core Feature Highlights
+
+### 1. 🗂️ Session Management System
+- **3-State Adaptive Accordions**:
+  1. 📁 **Collapsed State**: Sleek 1-line header bar with title, color tag, and tab count.
+  2. 🔍 **Partial Preview State**: Displays the top 3 primary tabs for quick context scanning without taking up full vertical space.
+  3. 📂 **Full Expanded State**: Complete list of saved links with single tab deletion, copy URL, and drag ordering.
+- **Earth & Gem Color Tagging**: Organize work, research, personal, and project sessions using 8 curated color palettes (`clay`, `sage`, `slate`, `terra`, `rose`, `moss`, `indigo`, `sand`).
+- **Flexible Restoration**: Restore entire sessions in your current window or spin up a dedicated Chrome window.
+- **30-Day Trash Retention**: Accidental session deletions move to a local Trash Bin with 30-day retention and one-click restoration.
+
+### 2. 🔐 Encrypted GitHub Gist Cloud Sync
+- **Zero Middleman Servers**: Connect directly from your browser to GitHub's REST API using a standard Personal Access Token (PAT).
+- **Secret Gist Storage**: Data is saved into an isolated, secret GitHub Gist (`tab-out-session-data.json`), giving you 100% control over your personal data.
+- **Bi-directional Merging & Tombstones**: Intelligent conflict resolution synchronizes Sessions, Quick Sites, Save for Later items, and user Settings across multiple computers without resurrecting deleted items.
+- **Live Status Indicator**: Visual header badge reflecting real-time sync state (`Synced`, `Syncing`, `Sync error`).
+
+### 3. 🌐 Open Tabs Domain Grouping
+- **Smart Auto-Grouping**: Automatically aggregates all open tabs across Chrome windows by domain name, host, and port (including full `localhost:PORT` distinction for developers).
+- **One-Click Batch Actions**:
+  - 📥 **Save to Session**: Turn any domain tab group into a permanent, named session.
+  - 🧹 **Deduplicate**: Remove duplicate open tabs sharing identical URLs across windows.
+  - ❌ **Close Group**: Safely close all tabs in a domain group after saving.
+- **Cross-Window Tab Focus**: Click any tab title to instantly focus and bring that specific Chrome tab/window to the foreground.
+
+### 4. ⚡ Quick Sites Tile System
+- **Custom Canvas Cropper**: Built-in HTML5 canvas cropper tool that lets you crop, scale, and adjust custom icon upload images for your bookmarks.
+- **Adaptive Tile Geometry**: Switch seamlessly between **Squircle** (Apple-style continuous curvature) and **Circle** tile styles.
+- **Color Backfilling**: Preset color swatches and EyeDropper color picker for transparent PNGs.
+- **Offline Base64 Caching**: Icons are converted into optimized Base64 Data URLs and saved directly in `chrome.storage.local`, ensuring 100% reliable displays even when completely offline.
+
+### 5. ✍️ Save for Later Checklist
+- **Frictionless Reading Stash**: Quick-add temporary URLs and reading items without polluting your long-term bookmark tree.
+- **Handwritten Fountain Pen Strikethrough**: Checking off a completed item triggers a multi-line SVG pen stroke animation (`strikeThroughMultiLine`) across text lines, followed by a smooth slide-down archiving effect.
+- **Completed Archive**: Filter and clear completed items effortlessly.
+
+### 6. ⌛ Year Progress Topbar & Serif Clock
+- **Temporal Context**: Integrated real-time timeline displaying the exact percentage of the current year elapsed (`YEAR PROGRESS: XX.X%`), inherited from Tab Out Mission.
+- **Editorial Typography**: Elegant display clock powered by the classic **Fraunces** serif font family.
+
+---
+
+## 🛠️ Architecture & Tech Stack
+
+```mermaid
+graph TD
+    Sub[New Tab Page / index.html] --> App[React 18 Dashboard App]
+    App --> Store[Zustand Store / State Engine]
+    Store --> StorageAPI[chrome.storage.local]
+    Store --> SyncService[GitHub Gist Sync Service]
+    SyncService --> GistAPI[GitHub REST API / secret Gist]
+    App --> TabsAPI[chrome.tabs & chrome.windows API]
+    TabsAPI --> ChromeBrowser[Google Chrome Browser Engine]
+```
+
+| Domain | Technology / Tools |
+| :--- | :--- |
+| **Extension Standard** | Chrome Extension Manifest V3 |
+| **UI Framework** | React 18, TypeScript 5.2 |
+| **State Management** | Zustand 4.5 |
+| **Build Tooling** | Vite 5.3 + `@samrum/vite-plugin-web-extension` |
+| **Icons & Typography** | `@phosphor-icons/react`, Fraunces, Inter |
+| **Storage & Sync** | `chrome.storage.local`, GitHub Gist API (REST v3) |
+
+---
+
+## 🚀 Installation & Setup
+
+### Method 1: Install via AI Coding Agent (Recommended)
+
+Pass this repository URL to your AI Coding Agent (**Claude Code**, **Google Antigravity**, **Cursor**, **Windsurf**, or **Codex**) and tell it: `"install this"`:
+
+```text
+https://github.com/myg321/tab-out-session
+```
+
+The AI agent will read [`AGENTS.md`](./AGENTS.md), clone the repository, install dependencies, compile `extension-react/dist`, copy the extension path to your clipboard, and guide you through Chrome loading in ~1 minute.
+
+---
+
+### Method 2: Manual Installation
+
+**Step 1: Clone Repository & Setup Node Environment**
 
 ```bash
-git clone https://github.com/Logan-tree/tab-out-mission.git
+# Clone the repository
+git clone https://github.com/myg321/tab-out-session.git
+cd tab-out-session
+
+# Option A: Using fnm (Recommended)
+fnm install 20
+fnm use 20
+
+# Option B: Using nvm
+nvm install 20
+nvm use 20
 ```
 
-**Option B: Ask your coding agent to prepare it**
+**Step 2: Install Dependencies & Build Bundle**
 
-If you use a local coding agent, you can ask it:
+```bash
+# Navigate to the React extension directory
+cd extension-react
 
-```text
-Download this Chrome extension repo and prepare it for local installation:
-https://github.com/Logan-tree/tab-out-mission
+# Option A: Using pnpm (Recommended)
+pnpm install
+pnpm build
+
+# Option B: Using npm
+npm install
+npm run build
 ```
 
-The agent can clone or download the repo for you, but Chrome still requires you to load the extension manually.
+**Step 3: Load Extension into Chrome**
 
-**Load the Chrome extension**
-
-1. Open Chrome and go to `chrome://extensions`
-2. Enable **Developer mode**
-3. Click **Load unpacked**
-4. Select the `extension/` folder inside this repo
-
-**Open a new tab**
-
-You should see Tab Out Mission.
+1. Open **Google Chrome** and navigate to `chrome://extensions`.
+2. Enable **Developer mode** using the toggle switch in the top-right corner.
+3. Click the **Load unpacked** button in the top-left toolbar.
+4. Browse to your local project directory and select the build folder:
+   ```text
+   /path/to/tab-out-session/extension-react/dist
+   ```
+5. Open a **New Tab** (`Cmd + T` on macOS, `Ctrl + T` on Windows/Linux) to launch your new **Tab Out Session** dashboard!
 
 ---
 
-## How It Works
+### Development Mode (Hot Reloading)
 
-```text
-You open a new tab
-  -> Tab Out Mission shows your open tabs grouped by domain
-  -> You move relevant tabs into a mission
-  -> You capture small ideas in Quick Notes
-  -> You save useful tabs for later
-  -> You close or complete tab groups when the context is done
+```bash
+cd extension-react
+pnpm dev # or npm run dev
 ```
 
-Everything runs inside the Chrome extension. User data is stored locally through `chrome.storage.local`.
+---
+
+## 🔒 Privacy & Security
+
+**Tab Out Session is built with privacy as a fundamental constraint.**
+
+- 🚫 **No Server**: We do not run any servers, databases, or analytics services.
+- 🚫 **No Tracking / Telemetry**: Zero user tracking, cookies, or telemetry code.
+- 🔐 **Encrypted Gist Sync**: Cloud synchronization communicates **directly** with GitHub's HTTPS API using your personal token. Your data is stored in your private Gist and never touches any third-party infrastructure.
 
 ---
 
-## Privacy
+## 🤝 Contributing
 
-Tab Out Mission does not send your tabs, notes, or saved items to a server. The extension does not require an account and does not call an external API.
+Contributions, feature ideas, and visual refinements are welcome!
 
----
-
-## Acknowledgements
-
-Tab Out Mission is built on top of [Zara's original Tab Out extension](https://github.com/zarazhangrui/tab-out), which focused on two core blocks: open tabs and saved-for-later tabs.
-
-This version extends that foundation with a mission-oriented workflow, Quick Notes, and a more personal new-tab operating surface.
+1. Fork the Repository (`https://github.com/myg321/tab-out-session`).
+2. Create a Feature Branch (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add amazing feature'`).
+4. Push to the Branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request.
 
 ---
 
-## Tech Stack
+## 📜 License
 
-| What | How |
-|------|-----|
-| Extension | Chrome Manifest V3 |
-| Storage | `chrome.storage.local` |
-| Sound | Web Audio API |
-| Animations | CSS transitions + JavaScript confetti particles |
+This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
 
 ---
 
-## License
+## 🙏 Acknowledgements
 
-MIT
+- Forked from **[Tab Out Mission](https://github.com/Logan-tree/tab-out-mission)**, from which we inherited the beloved **Year Progress topbar** concept.
+- Inspired by the core temporal philosophy of **[Tab Out](https://github.com/zarazhangrui/tab-out)** by Zara.
+- Built with React 18, Vite, and Chrome Manifest V3 APIs.
+
+---
+
+<div align="center">
+  <sub>Crafted with focus & intention by <a href="https://github.com/myg321">myg321</a> and open-source contributors.</sub>
+</div>
