@@ -494,6 +494,9 @@
 }
 
 .sectionAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
@@ -501,11 +504,28 @@
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-md);
   background: transparent;
-  padding: 4px 12px;
+  padding: 4px 10px;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 .sectionAction:hover {
   color: var(--color-ink);
   border-color: var(--color-muted);
+}
+
+.closeAllBtn {
+  transition: all 0.15s ease;
+}
+
+.closeAllBtn:hover {
+  color: #b35a5a;
+  border-color: rgba(179, 90, 90, 0.4);
+  background: rgba(179, 90, 90, 0.05);
+}
+
+.closeAllConfirm {
+  color: #b35a5a !important;
+  border-color: #b35a5a !important;
+  background: rgba(179, 90, 90, 0.12) !important;
+  font-weight: 600;
 }

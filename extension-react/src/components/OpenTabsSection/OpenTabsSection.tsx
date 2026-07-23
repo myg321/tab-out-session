@@ -586,6 +586,51 @@ export function OpenTabsSection() {
     });
   };
 
+  const [confirmCloseAllTabs, setConfirmCloseAllTabs] = useState(false);
+  const confirmCloseAllTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!confirmCloseAllTabs) return;
+    const handleOutsideClick = () => setConfirmCloseAllTabs(false);
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, [confirmCloseAllTabs]);
+
+  const handleCloseAllTabs = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirmCloseAllTabs) {
+      setConfirmCloseAllTabs(true);
+      if (confirmCloseAllTimerRef.current) clearTimeout(confirmCloseAllTimerRef.current);
+      confirmCloseAllTimerRef.current = setTimeout(() => {
+        setConfirmCloseAllTabs(false);
+      }, 3500);
+      return;
+    }
+
+    setConfirmCloseAllTabs(false);
+    if (confirmCloseAllTimerRef.current) clearTimeout(confirmCloseAllTimerRef.current);
+
+    if (typeof chrome === 'undefined' || !chrome.tabs) return;
+
+    const allTabs = await chrome.tabs.query({});
+    // Pinned tabs MUST NOT be closed, regardless of settings.showPinnedTabs
+    const tabsToClose = allTabs.filter(t => !t.pinned);
+
+    if (tabsToClose.length === 0) {
+      showToast('No unpinned tabs to close');
+      return;
+    }
+
+    // Open a new tab so window stays open cleanly
+    await chrome.tabs.create({});
+
+    const idsToRemove = tabsToClose.map(t => t.id!).filter(Boolean);
+    await chrome.tabs.remove(idsToRemove);
+
+    showToast(`Closed ${idsToRemove.length} tabs`);
+    loadTabs();
+  };
+
   if (groups.length === 0) return null;
 
   return (
@@ -599,7 +644,18 @@ export function OpenTabsSection() {
             Dupes ({dupeUrls.size}) ×
           </button>
         )}
-        <button className={styles.sectionAction} onClick={handleSaveSession}>Save All</button>
+        <button className={styles.sectionAction} onClick={handleSaveSession}>
+          <BookmarkSimple size={13} />
+          <span>Save All</span>
+        </button>
+        <button
+          className={`${styles.sectionAction} ${styles.closeAllBtn} ${confirmCloseAllTabs ? styles.closeAllConfirm : ''}`}
+          onClick={handleCloseAllTabs}
+          title="Close all unpinned tabs"
+        >
+          <X size={13} />
+          <span>{confirmCloseAllTabs ? 'Confirm Close?' : 'Close All'}</span>
+        </button>
       </div>
 
       <div className={styles.grid}>

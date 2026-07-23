@@ -38,6 +38,9 @@
 }
 
 .emptyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
@@ -48,7 +51,7 @@
   padding: 3px 10px;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.15s, color 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 .emptyBtn:hover { border-color: var(--color-error); color: var(--color-error); }
 .emptyBtnConfirm { border-color: var(--color-error); color: var(--color-error); font-weight: 600; }

@@ -44,7 +44,8 @@ export function RecycleBin() {
             className={`${styles.emptyBtn} ${confirmEmpty ? styles.emptyBtnConfirm : ''}`}
             onClick={e => { e.stopPropagation(); handleEmptyTrash(); }}
           >
-            {confirmEmpty ? 'Confirm?' : 'Empty Trash'}
+            <Trash size={13} />
+            <span>{confirmEmpty ? 'Confirm?' : 'Empty Trash'}</span>
           </button>
         )}
       </div>

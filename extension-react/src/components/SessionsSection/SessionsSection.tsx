@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowsInLineVertical, ArrowsOutLineVertical, Rows } from '@phosphor-icons/react';
+import { ArrowsInLineVertical, ArrowsOutLineVertical, Rows, Plus } from '@phosphor-icons/react';
 import { useStore } from '../../store';
 import { SessionCard } from '../SessionCard/SessionCard';
 import styles from './SessionsSection.module.css';
@@ -69,7 +69,10 @@ export function SessionsSection() {
             )}
           </button>
         )}
-        <button className={styles.sectionAction} onClick={handleNew}>+ New Session</button>
+        <button className={styles.sectionAction} onClick={handleNew}>
+          <Plus size={13} />
+          <span>New Session</span>
+        </button>
       </div>
       <div className={styles.grid}>
         {sessions.map((s, index) => (
