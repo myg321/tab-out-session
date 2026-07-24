@@ -28,19 +28,16 @@ jobs:
           version: 9
 
       - name: Install Dependencies
-        run: |
-          cd extension-react
-          pnpm install
+        working-directory: extension-react
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build Extension Bundle
-        run: |
-          cd extension-react
-          pnpm build
+        working-directory: extension-react
+        run: pnpm build
 
       - name: Archive Dist Bundle
-        run: |
-          cd extension-react
-          zip -r ../tab-out-session-${{ github.ref_name }}.zip dist
+        working-directory: extension-react
+        run: zip -r ../tab-out-session-${{ github.ref_name }}.zip dist
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
