@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ArrowsClockwise, CloudArrowUp, CloudArrowDown, Key, ArrowSquareOut, Check, Plugs } from '@phosphor-icons/react';
+import { X, ArrowsClockwise, CloudArrowUp, CloudArrowDown, Key, ArrowSquareOut, Check, Plugs, Copy } from '@phosphor-icons/react';
 import { useStore } from '../../store';
 import styles from './SyncModal.module.css';
 
@@ -14,11 +14,13 @@ export function SyncModal() {
     syncNow,
     uploadToCloud,
     downloadFromCloud,
-    toggleAutoSync
+    toggleAutoSync,
+    showToast
   } = useStore();
 
   const [inputToken, setInputToken] = useState(syncConfig?.token || '');
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   if (!syncModalOpen) return null;
 
@@ -31,6 +33,15 @@ export function SyncModal() {
     if (ok) {
       // Keep modal open or close based on preference
     }
+  };
+
+  const handleCopyToken = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!syncConfig?.token) return;
+    navigator.clipboard.writeText(syncConfig.token);
+    showToast('Token copied to clipboard');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const tokenUrl = 'https://github.com/settings/tokens/new?scopes=gist&description=Tab%20Out%20Session%20Sync';
@@ -55,13 +66,22 @@ export function SyncModal() {
                   <div className={styles.subText}>Gist ID: {syncConfig.gistId.slice(0, 12)}...</div>
                 </div>
               </div>
-              <button
-                className={styles.closeBtn}
-                onClick={disconnectSync}
-                title="Disconnect GitHub Token"
-              >
-                <Plugs size={16} />
-              </button>
+              <div className={styles.statusCardActions}>
+                <button
+                  className={styles.iconBtn}
+                  onClick={handleCopyToken}
+                  title="Copy GitHub Token"
+                >
+                  {copied ? <Check size={16} style={{ color: '#10b981' }} /> : <Copy size={16} />}
+                </button>
+                <button
+                  className={`${styles.iconBtn} ${styles.dangerBtn}`}
+                  onClick={disconnectSync}
+                  title="Disconnect GitHub Token"
+                >
+                  <Plugs size={16} />
+                </button>
+              </div>
             </div>
 
             <div className={styles.section}>

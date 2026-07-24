@@ -32,7 +32,8 @@ export function SyncBadge() {
     uploadToCloud,
     downloadFromCloud,
     disconnectSync,
-    setSyncModalOpen
+    setSyncModalOpen,
+    showToast
   } = useStore();
 
   const [showDropdown, setShowDropdown] = useState(false);
