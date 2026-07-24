@@ -131,7 +131,20 @@ graph TD
 
 ## 🚀 Installation & Setup
 
-### Method 1: Install via AI Coding Agent (Recommended)
+### Method 1: Pre-built Release (Fastest & Zero CLI Required) ⚡
+
+No Node.js, pnpm, or terminal required! Download the ready-to-use extension bundle:
+
+1. Download the latest `tab-out-session-vX.X.X.zip` from the [GitHub Releases Page](https://github.com/myg321/tab-out-session/releases/latest).
+2. Extract the downloaded ZIP archive on your computer.
+3. Open **Google Chrome** and navigate to `chrome://extensions`.
+4. Enable **Developer mode** (toggle switch in the top-right corner).
+5. Click **Load unpacked** (top-left button) and select the extracted folder.
+6. Open a **New Tab** (`Cmd + T` on macOS, `Ctrl + T` on Windows/Linux) to launch **Tab Out Session**!
+
+---
+
+### Method 2: Install via AI Coding Agent (Automated)
 
 Pass this repository URL to your AI Coding Agent (**Claude Code**, **Google Antigravity**, **Cursor**, **Windsurf**, or **Codex**) and tell it: `"install this"`:
 
@@ -143,7 +156,7 @@ The AI agent will read [`AGENTS.md`](./AGENTS.md), clone the repository, install
 
 ---
 
-### Method 2: Manual Installation
+### Method 3: Build from Source (For Developers)
 
 **Step 1: Clone Repository & Setup Node Environment**
 

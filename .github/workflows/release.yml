@@ -1,0 +1,55 @@
+name: Build & Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Build Extension Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: |
+          cd extension-react
+          pnpm install --no-frozen-lockfile
+
+      - name: Build Extension Bundle
+        run: |
+          cd extension-react
+          pnpm build
+
+      - name: Archive Dist Bundle
+        run: |
+          cd extension-react
+          zip -r ../tab-out-session-${{ github.ref_name }}.zip dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tab-out-session-${{ github.ref_name }}.zip
+          name: Tab Out Session ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
