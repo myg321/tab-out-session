@@ -32,7 +32,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd extension-react
-          pnpm install
+          pnpm install --no-frozen-lockfile
 
       - name: Build Extension Bundle
         run: |
