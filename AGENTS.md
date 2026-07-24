@@ -24,6 +24,8 @@ Before performing terminal commands, give the user a quick 1-sentence overview:
 
 > **Tab Out Session** is an editorial Chrome New Tab page extension combining temporal year progress awareness with domain-level tab control, color-coded session management, and encrypted GitHub Gist cloud synchronization.
 
+> 💡 **Pre-built Release Note**: Non-developer users can download ready-to-use ZIP bundles directly from [GitHub Releases](https://github.com/myg321/tab-out-session/releases/latest) without CLI compilation. For building from source or assisting with development, proceed with Step 1 below.
+
 ---
 
 ### Step 1 — Clone Repository & Build Dist Bundle

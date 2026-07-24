@@ -105,6 +105,40 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
 
 ---
 
+## 🚀 Installation & Setup
+
+### Method 1: Pre-built Release (Recommended for All Users) ⚡
+
+No Node.js, pnpm, or terminal required! Download the ready-to-use extension bundle in 1 minute:
+
+1. Download the latest `tab-out-session-vX.X.X.zip` from the **[GitHub Releases Page](https://github.com/myg321/tab-out-session/releases/latest)**.
+2. Extract the downloaded ZIP archive on your computer.
+3. Open **Google Chrome** and navigate to `chrome://extensions`.
+4. Enable **Developer mode** using the toggle switch in the top-right corner.
+5. Click **Load unpacked** (top-left button) and select the extracted folder.
+6. Open a **New Tab** (`Cmd + T` on macOS, `Ctrl + T` on Windows/Linux) to launch **Tab Out Session**!
+
+---
+
+### Method 2: Build from Source (For Developers & AI Agents)
+
+For developers contributing to the project or users using AI Coding Agents (**Google Antigravity**, **Claude Code**, **Cursor**, **Windsurf**, or **Codex**):
+
+```bash
+# Clone the repository
+git clone https://github.com/myg321/tab-out-session.git
+cd tab-out-session/extension-react
+
+# Install dependencies and build extension bundle
+pnpm install && pnpm build
+```
+
+Then load `extension-react/dist` into `chrome://extensions`.
+
+> 🤖 **Note for AI Agents**: Refer to [`AGENTS.md`](./AGENTS.md) for automated agent installation and development workflows.
+
+---
+
 ## 🛠️ Architecture & Tech Stack
 
 ```mermaid
@@ -126,88 +160,6 @@ graph TD
 | **Build Tooling** | Vite 5.3 + `@samrum/vite-plugin-web-extension` |
 | **Icons & Typography** | `@phosphor-icons/react`, Fraunces, Inter |
 | **Storage & Sync** | `chrome.storage.local`, GitHub Gist API (REST v3) |
-
----
-
-## 🚀 Installation & Setup
-
-### Method 1: Pre-built Release (Fastest & Zero CLI Required) ⚡
-
-No Node.js, pnpm, or terminal required! Download the ready-to-use extension bundle:
-
-1. Download the latest `tab-out-session-vX.X.X.zip` from the [GitHub Releases Page](https://github.com/myg321/tab-out-session/releases/latest).
-2. Extract the downloaded ZIP archive on your computer.
-3. Open **Google Chrome** and navigate to `chrome://extensions`.
-4. Enable **Developer mode** (toggle switch in the top-right corner).
-5. Click **Load unpacked** (top-left button) and select the extracted folder.
-6. Open a **New Tab** (`Cmd + T` on macOS, `Ctrl + T` on Windows/Linux) to launch **Tab Out Session**!
-
----
-
-### Method 2: Install via AI Coding Agent (Automated)
-
-Pass this repository URL to your AI Coding Agent (**Claude Code**, **Google Antigravity**, **Cursor**, **Windsurf**, or **Codex**) and tell it: `"install this"`:
-
-```text
-https://github.com/myg321/tab-out-session
-```
-
-The AI agent will read [`AGENTS.md`](./AGENTS.md), clone the repository, install dependencies, compile `extension-react/dist`, copy the extension path to your clipboard, and guide you through Chrome loading in ~1 minute.
-
----
-
-### Method 3: Build from Source (For Developers)
-
-**Step 1: Clone Repository & Setup Node Environment**
-
-```bash
-# Clone the repository
-git clone https://github.com/myg321/tab-out-session.git
-cd tab-out-session
-
-# Option A: Using fnm (Recommended)
-fnm install 20
-fnm use 20
-
-# Option B: Using nvm
-nvm install 20
-nvm use 20
-```
-
-**Step 2: Install Dependencies & Build Bundle**
-
-```bash
-# Navigate to the React extension directory
-cd extension-react
-
-# Option A: Using pnpm (Recommended)
-pnpm install
-pnpm build
-
-# Option B: Using npm
-npm install
-npm run build
-```
-
-**Step 3: Load Extension into Chrome**
-
-1. Open **Google Chrome** and navigate to `chrome://extensions`.
-2. Enable **Developer mode** using the toggle switch in the top-right corner.
-3. Click the **Load unpacked** button in the top-left toolbar.
-4. Browse to your local project directory and select the build folder:
-   ```text
-   /path/to/tab-out-session/extension-react/dist
-   ```
-5. Open a **New Tab** (`Cmd + T` on macOS, `Ctrl + T` on Windows/Linux) to launch your new **Tab Out Session** dashboard!
-
----
-
-### Development Mode (Hot Reloading)
-
-```bash
-cd extension-react
-pnpm dev # or npm run dev
-```
 
 ---
 
