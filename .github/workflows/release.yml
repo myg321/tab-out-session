@@ -22,16 +22,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install pnpm
-        run: npm install -g pnpm@9
-
-      - name: Install Dependencies
+      - name: Install & Build Extension Bundle
         working-directory: extension-react
-        run: pnpm install --no-frozen-lockfile 2>&1
-
-      - name: Build Extension Bundle
-        working-directory: extension-react
-        run: pnpm build
+        run: |
+          npm install
+          npm run build
 
       - name: Archive Dist Bundle
         working-directory: extension-react
