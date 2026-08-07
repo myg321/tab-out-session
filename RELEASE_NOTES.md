@@ -1,27 +1,19 @@
 ## 🌿 Tab Out Session v1.2.0
 
-**Transforming Tab Overload into Intentional, Focused Workflows.**
+> 🚀 **Version Highlight**: Added standalone PWA application window filtering for a cleaner Open Tabs workspace.
 
 ---
 
-### ✨ Core Features & What's New
+### 🚀 What's New
 
-- 📱 **PWA App Tabs Control**: Added setting option *"Hide PWA app tabs in Open Tabs"* (enabled by default) to automatically filter out standalone desktop PWA windows (such as Google Calendar, Notion, Teams, etc.) from the Open Tabs grid.
-- 🗂️ **Session Management System**: Save, categorize, and restore tab groups with 3-state adaptive accordions and 30-day Trash recovery.
-- 🖐️ **Universal Drag-and-Drop**: Reorder Session cards, intra-session links, Save for Later reading items, and Quick Sites tiles freely.
-- ⚡ **Instant Extension Toolbar Popup**: Park any active webpage directly into a Session or Save for Later with 1-click from the Chrome extension icon.
-- 🔐 **Encrypted GitHub Gist Cloud Sync**: Synchronize your sessions, settings, and custom tile orders across multiple devices via personal GitHub Gists.
-- 🧹 **Domain-Level Tab Control**: Group active tabs automatically by domain name with batch "Save All", "Close All" (with pinned tab protection), and deduplication.
-- ⌛ **Temporal Year Progress Topbar**: Real-time D-O-Y timeline progress bar with elegant Fraunces serif display clock.
-- 🎨 **Automatic Dark/Light Mode**: Seamless system appearance adaptation with warm paper and midnight themes.
+- 📱 **PWA App Window Control**: Added `"Hide PWA app tabs in Open Tabs"` setting (enabled by default) to automatically filter out desktop PWA windows (Google Calendar, Notion, Teams, etc.) from Open Tabs and protect them from batch closure.
+
+### 🐛 Bug Fixes & Refinements
+
+- 📦 **Dist Package Root Structure**: Updated GitHub Release ZIP archiving path so `manifest.json` sits directly at the zip root, enabling 1-click loading without folder nesting errors.
 
 ---
 
-### 📦 Quick Installation Guide (No CLI Required)
+### 📦 Installation
 
-1. Download `tab-out-session-v1.2.0.zip` from the **Assets** section below.
-2. Extract the downloaded ZIP archive on your computer.
-3. Open **Google Chrome** and navigate to `chrome://extensions`.
-4. Enable **Developer mode** (toggle switch in the top-right corner).
-5. Click **Load unpacked** (top-left button) and select the extracted folder.
-6. Open a **New Tab** (`Cmd + T` / `Ctrl + T`) to launch **Tab Out Session**!
+Download `tab-out-session-v1.2.0.zip` from **Assets** below, extract, and load into Chrome (`chrome://extensions`).

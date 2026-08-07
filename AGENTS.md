@@ -107,3 +107,13 @@ After the user loads the extension, summarize the primary feature controls:
 - **Cloud Sync**: Direct browser REST API calls to GitHub Gists (`tab-out-session-data.json`) using Personal Access Tokens — no external servers.
 - **Updating**: Run `git pull && cd extension-react && pnpm build`, then click the reload button in `chrome://extensions`.
 - **Original Lineage**: Forked from [Tab Out Mission](https://github.com/Logan-tree/tab-out-mission), inspired by Zara's [Tab Out](https://github.com/zarazhangrui/tab-out).
+
+---
+
+## 📝 Rule: Release Notes Specification
+
+When assisting with tag creation or Release updates, AI Agents **MUST** strictly follow these rules:
+
+1. **Delta-Focused Only**: Never repeat all-time historical core features in release notes for incremental versions (`v1.2.0`, `v1.3.0`, etc.).
+2. **Section Categories**: Structure release notes using `🚀 What's New`, `🐛 Bug Fixes & Refinements`, and `📦 Installation`.
+3. **Release File**: Write the release notes to `RELEASE_NOTES.md` at repo root so `.github/workflows/release.yml` automatically picks it up via `body_path: RELEASE_NOTES.md`.
