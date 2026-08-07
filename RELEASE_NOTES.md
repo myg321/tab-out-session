@@ -1,4 +1,4 @@
-## 🌿 Tab Out Session v1.1.0
+## 🌿 Tab Out Session v1.2.0
 
 **Transforming Tab Overload into Intentional, Focused Workflows.**
 
@@ -6,6 +6,7 @@
 
 ### ✨ Core Features & What's New
 
+- 📱 **PWA App Tabs Control**: Added setting option *"Hide PWA app tabs in Open Tabs"* (enabled by default) to automatically filter out standalone desktop PWA windows (such as Google Calendar, Notion, Teams, etc.) from the Open Tabs grid.
 - 🗂️ **Session Management System**: Save, categorize, and restore tab groups with 3-state adaptive accordions and 30-day Trash recovery.
 - 🖐️ **Universal Drag-and-Drop**: Reorder Session cards, intra-session links, Save for Later reading items, and Quick Sites tiles freely.
 - ⚡ **Instant Extension Toolbar Popup**: Park any active webpage directly into a Session or Save for Later with 1-click from the Chrome extension icon.
@@ -18,7 +19,7 @@
 
 ### 📦 Quick Installation Guide (No CLI Required)
 
-1. Download `tab-out-session-v1.1.0.zip` from the **Assets** section below.
+1. Download `tab-out-session-v1.2.0.zip` from the **Assets** section below.
 2. Extract the downloaded ZIP archive on your computer.
 3. Open **Google Chrome** and navigate to `chrome://extensions`.
 4. Enable **Developer mode** (toggle switch in the top-right corner).
