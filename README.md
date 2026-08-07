@@ -79,12 +79,13 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
 - **Bi-directional State & Order Merging**: Synchronizes Sessions, custom drag-and-drop order positions, Quick Sites, Save for Later items, and user Settings across multiple computers without resurrecting deleted items.
 - **Live Status Indicator**: Visual header badge reflecting real-time sync state (`Synced`, `Syncing`, `Sync error`).
 
-### 4. 🌐 Open Tabs Domain Grouping
+### 4. 🌐 Open Tabs Domain Grouping & PWA Protection
 - **Smart Auto-Grouping**: Automatically aggregates all open tabs across Chrome windows by domain name, host, and port (including full `localhost:PORT` distinction for developers).
+- **📱 PWA Desktop App Filtering**: Built-in toggle setting (*"Hide PWA app tabs in Open Tabs"*, enabled by default) that detects standalone desktop PWA windows (Google Calendar, Notion, Teams, etc.) and filters them from the Open Tabs grid so they never clutter your workspace.
 - **One-Click Batch Actions**:
   - 📥 **Save to Session**: Turn any domain tab group into a permanent, named session.
   - 🧹 **Deduplicate**: Remove duplicate open tabs sharing identical URLs across windows.
-  - ❌ **Close Group**: Safely close all tabs in a domain group after saving.
+  - ❌ **Close Group / Close All**: Safely close tabs or domain groups with mandatory pinned tab and PWA app tab protection.
 - **Cross-Window Tab Focus**: Click any tab title to instantly focus and bring that specific Chrome tab/window to the foreground.
 
 ### 5. ⚡ Quick Sites Tile System & Icon Studio
