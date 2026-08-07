@@ -29,8 +29,8 @@ jobs:
           npm run build
 
       - name: Archive Dist Bundle
-        working-directory: extension-react
-        run: zip -r ../tab-out-session-${{ github.ref_name }}.zip dist
+        working-directory: extension-react/dist
+        run: zip -r ../../tab-out-session-${{ github.ref_name }}.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
