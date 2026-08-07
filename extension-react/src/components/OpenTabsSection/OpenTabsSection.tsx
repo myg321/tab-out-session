@@ -333,9 +333,25 @@ export function OpenTabsSection() {
     if (typeof chrome === 'undefined' || !chrome.tabs) return;
     const rawTabs = await chrome.tabs.query({});
     const extId = chrome.runtime.id;
+
+    let pwaWindowIds = new Set<number>();
+    if (settings.hidePwaTabs !== false && typeof chrome !== 'undefined' && chrome.windows) {
+      try {
+        const windows = await chrome.windows.getAll();
+        windows.forEach(w => {
+          if (w.id && w.type === 'app') {
+            pwaWindowIds.add(w.id);
+          }
+        });
+      } catch (err) {
+        console.warn('Failed to query windows:', err);
+      }
+    }
+
     const filtered: LiveTab[] = rawTabs
       .filter(t => t.url && !t.url.startsWith(`chrome-extension://${extId}`) && !t.url.startsWith('chrome://'))
       .filter(t => settings.showPinnedTabs ? true : !t.pinned)
+      .filter(t => (settings.hidePwaTabs !== false && t.windowId && pwaWindowIds.has(t.windowId)) ? false : true)
       .map(t => ({
         id: t.id!,
         url: t.url!,
@@ -374,7 +390,7 @@ export function OpenTabsSection() {
       groupList.sort((a, b) => b.tabs.length - a.tabs.length);
     }
     setGroups(groupList);
-  }, [settings.showPinnedTabs, settings.itemAppendOrder?.openTabs]);
+  }, [settings.showPinnedTabs, settings.hidePwaTabs, settings.itemAppendOrder?.openTabs]);
 
   useEffect(() => {
     const clearTooltip = () => setTooltip(null);

@@ -44,6 +44,22 @@ export function Settings() {
           </button>
         </div>
 
+        {/* Setting 2: PWA Apps */}
+        <div className={styles.settingRow}>
+          <div className={styles.settingInfo}>
+            <span className={styles.settingLabel}>Hide PWA app tabs in Open Tabs</span>
+            <span className={styles.settingDescription}>When on, standalone PWA application windows (like Calendar, Notion, etc.) are hidden from Open Tabs.</span>
+          </div>
+          <button
+            className={`${styles.toggle} ${settings.hidePwaTabs !== false ? styles.toggleOn : ''}`}
+            onClick={() => updateSettings({ hidePwaTabs: settings.hidePwaTabs === false })}
+            role="switch"
+            aria-checked={settings.hidePwaTabs !== false}
+          >
+            <span className={styles.toggleThumb} />
+          </button>
+        </div>
+
         {/* Auto-close tab(s) after saving */}
         <div className={styles.settingRow}>
           <div className={styles.settingInfo}>

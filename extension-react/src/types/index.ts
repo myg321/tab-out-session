@@ -71,6 +71,7 @@ export interface ItemAppendOrder {
 export interface Settings {
   showFocusMode?: boolean;
   showPinnedTabs: boolean;
+  hidePwaTabs?: boolean;
   theme: 'light' | 'dark' | 'auto';
   autoCloseOnSave: boolean;
   animateCompletedTab?: boolean;

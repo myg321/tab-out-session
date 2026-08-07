@@ -89,6 +89,7 @@ const defaultState: TabOutSessionStorage & { faviconCache: Record<string, string
   faviconCache: {},
   settings: {
     showPinnedTabs: true,
+    hidePwaTabs: true,
     theme: 'auto',
     autoCloseOnSave: false,
     animateCompletedTab: true,
