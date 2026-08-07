@@ -119,3 +119,4 @@ When assisting with tag creation or Release updates, AI Agents **MUST** strictly
 3. **Synchronous README Updates**: Whenever a release introduces new features, `README.md`'s Core Feature Highlights section MUST be updated synchronously.
 4. **Section Categories**: Structure release notes using `🚀 What's New`, `🐛 Bug Fixes & Refinements`, and `📦 Installation`.
 5. **Release File**: Write the release notes to `RELEASE_NOTES.md` at repo root so `.github/workflows/release.yml` automatically picks it up via `body_path: RELEASE_NOTES.md`.
+6. **Strict README Formatting Consistency**: When updating `README.md`, ALWAYS strictly adhere to existing section hierarchy, typography, list indentation, and emoji usage patterns (e.g. do not insert arbitrary emojis in top-level bullet titles if sibling items do not use them).

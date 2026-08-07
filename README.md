@@ -81,7 +81,7 @@ Below is the complete dashboard interface of **Tab Out Session** showing all cor
 
 ### 4. 🌐 Open Tabs Domain Grouping & PWA Protection
 - **Smart Auto-Grouping**: Automatically aggregates all open tabs across Chrome windows by domain name, host, and port (including full `localhost:PORT` distinction for developers).
-- **📱 PWA Desktop App Filtering**: Built-in toggle setting (*"Hide PWA app tabs in Open Tabs"*, enabled by default) that detects standalone desktop PWA windows (Google Calendar, Notion, Teams, etc.) and filters them from the Open Tabs grid so they never clutter your workspace.
+- **PWA Desktop App Filtering**: Built-in toggle setting (*"Hide PWA app tabs in Open Tabs"*, enabled by default) that detects standalone desktop PWA windows (Google Calendar, Notion, Teams, etc.) and filters them from the Open Tabs grid so they never clutter your workspace.
 - **One-Click Batch Actions**:
   - 📥 **Save to Session**: Turn any domain tab group into a permanent, named session.
   - 🧹 **Deduplicate**: Remove duplicate open tabs sharing identical URLs across windows.
