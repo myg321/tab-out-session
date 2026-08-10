@@ -1,109 +1,60 @@
-# AGENTS.md — AI Agent Installation & Development Guide
+# AGENTS.md — Tab Out Session AI Agent Development Guide & Memory
 
-This file provides instructions for AI Coding Agents (such as **Google Antigravity**, **Claude Code**, **Cursor**, **Windsurf**, or **Codex**) when assisting users with installing, building, or extending **Tab Out Session**.
-
----
-
-## 🤖 For AI Agents: Quick Installation Workflow
-
-When a user asks you to *"install this extension"* or *"set up tab-out-session"*, follow the automated workflow below.
-
-> ⚠️ **Note on Chrome Extension Security**
-> Google Chrome prohibits external software or CLI tools from programmatically interacting with `chrome://extensions` toggles or file pickers. Your role as an agent is to:
-> - ✅ Clone the repository and install dependencies
-> - ✅ Run `pnpm build` (or `npm run build`) to produce the `extension-react/dist` bundle
-> - ✅ Copy the absolute path of `extension-react/dist` to the user's system clipboard
-> - ✅ Open `chrome://extensions` in the default browser
-> - ✅ Clearly guide the user through the final 3 manual clicks
+This file serves as the primary instructions and persistent cross-conversation memory for AI Agents (**Google Antigravity**, **Claude Code**, **Cursor**, **Windsurf**, or **Codex**) when building, refactoring, or maintaining **Tab Out Session**.
 
 ---
 
-### Step 0 — Introduce Product & Value
+## 🎯 Document Purpose & Core Principles
 
-Before performing terminal commands, give the user a quick 1-sentence overview:
-
-> **Tab Out Session** is an editorial Chrome New Tab page extension combining temporal year progress awareness with domain-level tab control, color-coded session management, and encrypted GitHub Gist cloud synchronization.
-
-> 💡 **Pre-built Release Note**: Non-developer users can download ready-to-use ZIP bundles directly from [GitHub Releases](https://github.com/myg321/tab-out-session/releases/latest) without CLI compilation. For building from source or assisting with development, proceed with Step 1 below.
+1. **Internal Developer Guidance**: Provide clear rules and architectural specifications for AI Agents assisting with codebase development.
+2. **Persistent Cross-Conversation Memory**: Preserve core product decisions, user preferences, solved edge-cases, and historical context across conversation resets or context truncations.
+3. **No External User Onboarding**: Users install the extension directly by downloading pre-compiled ZIP bundles from [GitHub Releases](https://github.com/myg321/tab-out-session/releases/latest) and loading unpacked in `chrome://extensions`.
 
 ---
 
-### Step 1 — Clone Repository & Build Dist Bundle
+## 🛠️ Mandatory Development Rules & Environment
 
-Execute the following shell commands in the workspace:
-
-```bash
-# Clone the repository
-git clone https://github.com/myg321/tab-out-session.git
-cd tab-out-session/extension-react
-
-# Install dependencies and build extension bundle
-pnpm install && pnpm build
-```
-
-*(If `pnpm` is not available, fall back to `npm install && npm run build`)*
+1. **Node.js Management**: ALWAYS use `fnm` to manage Node.js versions (e.g. `eval "$(fnm env --use-on-cd)"`). Do NOT use `nvm` or manual global installations.
+2. **Package Manager**: ALWAYS use `pnpm` as the sole package manager (`pnpm install`, `pnpm build`, `pnpm dev`). Do NOT use `npm`, `yarn`, or `npx` (use `pnpm dlx` instead).
+3. **Workspace Isolation**: All active React code lives in `extension-react/`. NEVER modify or write code to the legacy `extension/` folder.
+4. **Git Hygiene & Local Isolation**: AI Agent local customization rules and scratchpad files in `.agents/` MUST remain strictly local and ignored in `.gitignore`.
 
 ---
 
-### Step 2 — Prepare Chrome Loading & Copy Path
+## 📐 Key Architecture & Technical Facts
 
-**Sub-step A: Copy the absolute build path to clipboard**
-
-- **macOS**:
-  ```bash
-  cd extension-react/dist && pwd | pbcopy && echo "✓ Extension dist path copied to clipboard!"
-  ```
-- **Linux**:
-  ```bash
-  cd extension-react/dist && pwd | xclip -selection clipboard 2>/dev/null || echo "Dist path: $(pwd)"
-  ```
-- **Windows (PowerShell)**:
-  ```powershell
-  Set-Clipboard -Value (Get-Item extension-react\dist).FullName
-  ```
-
-**Sub-step B: Open Chrome Extensions Manager Page**
-
-- **macOS**: `open "chrome://extensions"`
-- **Linux**: `google-chrome "chrome://extensions"`
-- **Windows**: `start chrome "chrome://extensions"`
-
-**Sub-step C: Output Clear User Instructions**
-
-Recite the remaining 4 manual clicks to the user clearly:
-
-> **Path copied to your clipboard!** Complete the final setup in Chrome:
->
-> 1. In `chrome://extensions`, toggle **Developer mode** (top-right corner).
-> 2. Click the **Load unpacked** button (top-left toolbar).
-> 3. When the system file picker opens, press **`Cmd + Shift + G`** on macOS (`Ctrl + L` on Windows/Linux) to bring up the path input box, paste (`Cmd + V` / `Ctrl + V`), and press Enter.
-> 4. Click **Select / Open** to load **Tab Out Session**.
-> 5. Open a **New Tab** (`Cmd + T`) to launch your new dashboard!
-
-**Sub-step D (Fallback Helper)**: Open Finder / Explorer to the `dist` directory so the user can drag-and-drop if desired:
-
-- **macOS**: `open extension-react/dist`
-- **Windows**: `explorer extension-react\dist`
+- **Manifest Standard**: Chrome Manifest V3 (`chrome_url_overrides: { newtab: "newtab.html" }`).
+- **Tech Stack**: React 18, TypeScript 5.2, Zustand 4.5, Vite 5.3, `@phosphor-icons/react`.
+- **Storage & Cloud Sync**: Local storage via `chrome.storage.local`. Cloud synchronization communicates directly from browser to GitHub REST API (`tab-out-session-data.json`) via GitHub Gists and PAT tokens — zero external servers.
+- **Favicon Handling**: Uses Chrome's native `chrome-extension://<id>/_favicon/?pageUrl=` API with offline Base64 Data URL caching in `chrome.storage.local`.
 
 ---
 
-### Step 3 — Feature Walkthrough & Verification
+## 📝 Release & Documentation Rules
 
-After the user loads the extension, summarize the primary feature controls:
-
-1. **Top Bar**: Year progress percentage bar, Fraunces serif clock, and GitHub Gist sync status badge.
-2. **Quick Sites Grid**: Drag-and-drop bookmark tiles with custom canvas cropper (squircle/circle tile shapes).
-3. **Open Tabs Section**: Domain-grouped active tabs with batch "Save Group", "Deduplicate", and "Close" buttons.
-4. **Sessions Section**: Color-tagged session cards with 3-state adaptive accordions and 30-day Trash bin.
-5. **Save for Later**: Reading checklist with handwritten fountain pen strikethrough animations.
+1. **Clean Release Tag Titles**: GitHub Release titles/names MUST NOT include the project prefix `"Tab Out Session"`. Only use the clean version tag (e.g., `v1.2.0`, `v1.3.0`) to avoid sidebar truncation.
+2. **Delta-Focused Release Notes**: Write release notes into `RELEASE_NOTES.md` at root. Focus strictly on incremental changes for the target version without repeating historical feature lists.
+3. **Synchronous README Updates**: Whenever a release introduces new user-facing features, `README.md`'s **Core Feature Highlights** section MUST be updated synchronously before cutting the release tag.
+4. **Strict README Formatting Consistency**: Always maintain existing section hierarchy, list indentation, typography, and emoji usage patterns in `README.md` (e.g., do not add ad-hoc emojis to top-level bullet titles if sibling items do not use them).
 
 ---
 
-## 🛠️ Key Technical Facts for Agents
+## 🧠 Persistent Cross-Conversation Memory & Decisions Log
 
-- **Manifest Version**: Chrome Manifest V3 (`chrome_url_overrides: { newtab: "newtab.html" }`).
-- **Tech Stack**: React 18, TypeScript 5.2, Zustand 4.5, Vite 5.3, Phosphor Icons.
-- **Icon Permission**: Uses Chrome's native `chrome-extension://<id>/_favicon/?pageUrl=` API with offline Base64 `chrome.storage.local` caching.
-- **Cloud Sync**: Direct browser REST API calls to GitHub Gists (`tab-out-session-data.json`) using Personal Access Tokens — no external servers.
-- **Updating**: Run `git pull && cd extension-react && pnpm build`, then click the reload button in `chrome://extensions`.
-- **Original Lineage**: Forked from [Tab Out Mission](https://github.com/Logan-tree/tab-out-mission), inspired by Zara's [Tab Out](https://github.com/zarazhangrui/tab-out).
+### 1. Open Tabs Section & Safety Controls
+- **Header Actions**: Features `Save All` (`<BookmarkSimple size={13} />`) and `Close All` (`<X size={13} />`).
+- **2-Step Close Confirmation**: `Close All` requires 2-step confirmation (`Confirm Close?` state) with a 3.5s auto-reset timer.
+- **Pinned Tab Protection**: `Close All` MUST NEVER close pinned tabs (`t.pinned === true`), regardless of `settings.showPinnedTabs`.
+- **PWA Desktop App Filtering & Protection**: 
+  - Added `hidePwaTabs?: boolean` in `Settings` (default `true`).
+  - `loadTabs()` queries `chrome.windows.getAll()` and excludes tabs in standalone PWA app windows (`w.type === 'app'`, such as Google Calendar, Notion, Teams).
+  - PWA desktop app windows are strictly protected from batch closure.
+
+### 2. Session & Save for Later State Engine
+- **Save for Later Timestamp Sync**: `SaveForLaterTab` includes an `updatedAt?: number` timestamp to ensure unchecking completed items syncs correctly to cloud Gist without being overridden by remote state.
+- **3-State Adaptive Accordion**: Sessions feature Collapsed, Partial (top 3 tabs), and Full Expanded states with persistent UI state.
+- **Universal Drag-and-Drop**: Supports native drag-and-drop reordering for Session cards, intra-Session links, Save for Later checklist items, and Quick Sites tiles.
+
+### 3. Sync & Modal Design
+- **Token Copy Feature**: Token copy button with clipboard copy and toast feedback resides inside `SyncModal.tsx` status card — NOT in the topbar `SyncBadge` dropdown menu.
+- **Pre-built Release Packaging**: `.github/workflows/release.yml` zips `extension-react/dist` contents directly so `manifest.json` sits at zip root for 1-click loading unpacked.
