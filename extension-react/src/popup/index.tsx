@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Check, BookmarkSimple, ArrowRight } from '@phosphor-icons/react';
-import { Session } from '../types';
+import { Check, BookmarkSimple, ArrowRight, Plus } from '@phosphor-icons/react';
+import { Session, SessionColor } from '../types';
+import { FaviconImg } from '../components/FaviconImg/FaviconImg';
 import '../styles/global.css';
 import styles from './Popup.module.css';
 
@@ -17,6 +18,17 @@ export default function Popup() {
   const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab | null>(null);
   const [isNewtab, setIsNewtab] = useState(false);
   const [toast, setToast] = useState('');
+
+  // Inline New Session creation state
+  const [isCreating, setIsCreating] = useState(false);
+  const [newSessionName, setNewSessionName] = useState('');
+  const [selectedColor, setSelectedColor] = useState<SessionColor>('clay');
+
+  useEffect(() => {
+    // Reset body style to force Chrome extension popup height to auto-adjust when expanding/collapsing
+    document.body.style.height = 'auto';
+    document.documentElement.style.height = 'auto';
+  }, [isCreating]);
 
   useEffect(() => {
     // Reset body background so .popup border-radius renders correctly
@@ -44,12 +56,12 @@ export default function Popup() {
     });
   }, []);
 
-  const SESSION_COLORS: Record<string, string> = {
+  const SESSION_COLORS: Record<SessionColor, string> = {
     clay: '#cc785c', sage: '#5a7a62', slate: '#5a6b7a', terra: '#9c5a3c',
     rose: '#a35a72', moss: '#4a6a4a', indigo: '#4a5a8a', sand: '#8a7a62',
   };
 
-  function getColorHex(v: string) { return SESSION_COLORS[v] ?? '#8a7a62'; }
+  function getColorHex(v: string) { return SESSION_COLORS[v as SessionColor] ?? '#8a7a62'; }
 
   function displaySessionName(name: string): string {
     if (!name.includes('.')) return name;
@@ -76,6 +88,34 @@ export default function Popup() {
       chrome.storage.local.set({ sessions: updated });
       setSessions(updated);
       setToast('Tab added to session!');
+      setTimeout(() => setToast(''), 2000);
+    });
+  };
+
+  const handleCreateNewSession = () => {
+    const trimmed = newSessionName.trim();
+    if (!trimmed || !currentTab) return;
+
+    chrome.storage.local.get(['sessions'], (data: StorageData) => {
+      const allSessions: Session[] = data.sessions || [];
+      const newSession: Session = {
+        id: Date.now().toString(),
+        name: trimmed,
+        color: selectedColor,
+        createdAt: Date.now(),
+        tabs: [{
+          url: currentTab.url || '',
+          title: currentTab.title || '',
+          favIconUrl: currentTab.favIconUrl,
+        }],
+      };
+
+      const updated = [...allSessions, newSession];
+      chrome.storage.local.set({ sessions: updated });
+      setSessions(updated);
+      setIsCreating(false);
+      setNewSessionName('');
+      setToast('New session created & tab saved!');
       setTimeout(() => setToast(''), 2000);
     });
   };
@@ -108,17 +148,18 @@ export default function Popup() {
       {/* Current tab header */}
       {currentTab && (
         <div className={styles.tabHeader}>
-          <img
-            src={currentTab.favIconUrl || `https://www.google.com/s2/favicons?domain=${new URL(tabUrl).hostname}&sz=16`}
-            width={16} height={16} style={{ borderRadius: 3, flexShrink: 0 }} alt=""
-            onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          <FaviconImg
+            url={tabUrl}
+            favIconUrl={currentTab.favIconUrl}
+            size={16}
+            style={{ borderRadius: 3, flexShrink: 0 }}
           />
           <span className={styles.tabTitle}>{currentTab.title}</span>
         </div>
       )}
 
       {sessions.length === 0 ? (
-        <p className={styles.emptyState}>No sessions yet. Create one from the new tab page.</p>
+        <p className={styles.emptyState}>No sessions yet.</p>
       ) : (
         <>
           {/* STATE B: Already in sessions */}
@@ -164,6 +205,62 @@ export default function Popup() {
         </>
       )}
 
+      {/* New Session Inline Form / Trigger */}
+      <div className={styles.newSessionContainer}>
+        {!isCreating ? (
+          <button className={styles.newSessionBtn} onClick={() => setIsCreating(true)}>
+            <Plus size={14} weight="bold" />
+            <span>New Session</span>
+          </button>
+        ) : (
+          <div className={styles.createForm}>
+            <input
+              type="text"
+              className={styles.sessionInput}
+              placeholder="Session name..."
+              value={newSessionName}
+              onChange={e => setNewSessionName(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') handleCreateNewSession();
+                if (e.key === 'Escape') setIsCreating(false);
+              }}
+              autoFocus
+            />
+            <div className={styles.colorPickerRow}>
+              {(Object.keys(SESSION_COLORS) as SessionColor[]).map(color => (
+                <span
+                  key={color}
+                  className={`${styles.colorDot} ${selectedColor === color ? styles.colorDotSelected : ''}`}
+                  style={{ background: SESSION_COLORS[color] }}
+                  onClick={() => setSelectedColor(color)}
+                />
+              ))}
+            </div>
+            <div className={styles.formActions}>
+              <button
+                className={styles.btnCancel}
+                onClick={() => {
+                  setIsCreating(false);
+                  setNewSessionName('');
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className={styles.btnSubmit}
+                onClick={handleCreateNewSession}
+                disabled={!newSessionName.trim()}
+              >
+                Create & Save
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Flat Hairline Divider */}
+      <div className={styles.divider} />
+
       {/* Save for Later */}
       <div className={styles.saveForLaterRow} onClick={saveForLater}>
         <BookmarkSimple size={14} />
@@ -175,6 +272,7 @@ export default function Popup() {
     </div>
   );
 }
+
 
 const root = createRoot(document.getElementById('root')!);
 root.render(<React.StrictMode><Popup /></React.StrictMode>);

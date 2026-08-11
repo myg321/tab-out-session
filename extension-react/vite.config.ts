@@ -14,7 +14,7 @@ export default defineConfig({
         description: "A new-tab session manager. Park tabs, restore sessions, stay focused.",
         chrome_url_overrides: { newtab: "newtab.html" },
         action: { default_popup: "popup.html", default_title: "Tab Out Session" },
-        permissions: ["tabs", "storage", "windows", "favicon"],
+        permissions: ["tabs", "storage", "windows", "favicon", "contextMenus"],
         host_permissions: ["<all_urls>"],
         background: { service_worker: "background.js" },
         icons: { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },

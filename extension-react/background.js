@@ -53,3 +53,114 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true; // Asynchronous response
   }
 });
+
+// Context Menu Management
+function displaySessionName(name) {
+  if (!name.includes('.')) return name;
+  const clean = name.replace(/^www\./, '').split('.')[0];
+  return clean.charAt(0).toUpperCase() + clean.slice(1);
+}
+
+function setupContextMenus() {
+  if (!chrome.contextMenus) return;
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: 'tab_out_root',
+      title: 'Tab Out Session',
+      contexts: ['link'],
+    });
+
+    chrome.contextMenus.create({
+      id: 'save_for_later',
+      parentId: 'tab_out_root',
+      title: '🔖 Save for Later',
+      contexts: ['link'],
+    });
+
+    chrome.storage.local.get(['sessions'], (data) => {
+      const sessions = data.sessions || [];
+      if (sessions.length > 0) {
+        chrome.contextMenus.create({
+          id: 'sep_1',
+          parentId: 'tab_out_root',
+          type: 'separator',
+          contexts: ['link'],
+        });
+
+        sessions.forEach((s) => {
+          chrome.contextMenus.create({
+            id: `session_${s.id}`,
+            parentId: 'tab_out_root',
+            title: `📁 ${displaySessionName(s.name)}`,
+            contexts: ['link'],
+          });
+        });
+      }
+    });
+  });
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  setupContextMenus();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  setupContextMenus();
+});
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local' && changes.sessions) {
+    setupContextMenus();
+  }
+});
+
+chrome.contextMenus?.onClicked.addListener((info) => {
+  const linkUrl = info.linkUrl;
+  if (!linkUrl) return;
+
+  let linkTitle = info.selectionText ? info.selectionText.trim() : '';
+  if (!linkTitle) {
+    try {
+      const parsedUrl = new URL(linkUrl);
+      linkTitle = parsedUrl.hostname + (parsedUrl.pathname !== '/' ? parsedUrl.pathname : '');
+    } catch {
+      linkTitle = linkUrl;
+    }
+  }
+
+  let favIconUrl = '';
+  try {
+    favIconUrl = `https://www.google.com/s2/favicons?domain=${new URL(linkUrl).hostname}&sz=16`;
+  } catch {
+    favIconUrl = '';
+  }
+
+  if (info.menuItemId === 'save_for_later') {
+    chrome.storage.local.get(['saveForLater'], (data) => {
+      const existing = data.saveForLater || [];
+      const newTab = {
+        id: Date.now().toString(),
+        url: linkUrl,
+        title: linkTitle,
+        favIconUrl,
+        completed: false,
+      };
+      chrome.storage.local.set({ saveForLater: [...existing, newTab] });
+    });
+  } else if (typeof info.menuItemId === 'string' && info.menuItemId.startsWith('session_')) {
+    const sessionId = info.menuItemId.replace('session_', '');
+    chrome.storage.local.get(['sessions'], (data) => {
+      const sessions = data.sessions || [];
+      const updated = sessions.map((s) => {
+        if (s.id !== sessionId) return s;
+        if (s.tabs.some((t) => t.url === linkUrl)) return s;
+        return {
+          ...s,
+          tabs: [...s.tabs, { url: linkUrl, title: linkTitle, favIconUrl }],
+        };
+      });
+      chrome.storage.local.set({ sessions: updated });
+    });
+  }
+});
+

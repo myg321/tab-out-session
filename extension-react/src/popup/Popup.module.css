@@ -1,3 +1,9 @@
+:global(html),
+:global(body) {
+  min-height: auto !important;
+  height: auto !important;
+}
+
 .popup {
   border-radius: 0;        /* Chrome forces straight corners anyway */
   padding: 16px;
@@ -9,11 +15,12 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* Header */
 .tabHeader {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-hairline);
 }
@@ -38,6 +45,16 @@
   font-weight: 600;
 }
 
+/* Shared Flat Divider Class */
+.divider {
+  height: 1px;
+  background-color: var(--color-hairline);
+  margin: 8px 0;
+  border: none;
+  width: 100%;
+}
+
+/* Session Items */
 .sessionRow {
   display: flex;
   align-items: center;
@@ -45,9 +62,11 @@
   padding: 7px 8px;
   border-radius: 6px;
   cursor: default;
-  transition: background 0.1s;
+  transition: background 0.15s ease;
 }
-.sessionRow:hover { background: var(--color-surface-soft); }
+.sessionRow:hover {
+  background: var(--color-surface-soft);
+}
 
 .sessionLeft {
   display: flex;
@@ -72,7 +91,6 @@
   text-overflow: ellipsis;
 }
 
-/* Add button - coral color, visible in both modes */
 .addBtn {
   color: var(--color-primary);
   font-size: 12px;
@@ -82,15 +100,20 @@
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  padding: 2px 4px;
+  padding: 2px 6px;
   border-radius: 4px;
   display: flex;
   align-items: center;
-  transition: background 0.1s;
+  transition: background 0.15s ease;
 }
-.addBtn:hover { background: rgba(204, 120, 92, 0.08); }
+.addBtn:hover {
+  background: rgba(204, 120, 92, 0.1);
+}
 
-.checkmark { color: var(--color-primary); flex-shrink: 0; }
+.checkmark {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
 
 .noOther {
   font-size: 12px;
@@ -103,26 +126,154 @@
   font-size: 13px;
   color: var(--color-muted);
   text-align: center;
-  padding: 8px 0;
+  padding: 12px 0;
   line-height: 1.5;
 }
 
+/* New Session Section */
+.newSessionContainer {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.newSessionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  box-sizing: border-box;
+}
+.newSessionBtn:hover {
+  background: var(--color-surface-soft);
+  color: var(--color-primary);
+}
+
+/* Inline Create Form */
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--color-surface-soft);
+  border-radius: 6px;
+  border: none;
+  box-sizing: border-box;
+}
+
+.sessionInput {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: 12px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.sessionInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(204, 120, 92, 0.15);
+}
+
+.colorPickerRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0;
+}
+
+.colorDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.colorDot:hover {
+  transform: scale(1.15);
+}
+.colorDotSelected {
+  border-color: var(--color-ink);
+  transform: scale(1.15);
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.btnCancel {
+  font-size: 11px;
+  background: transparent;
+  border: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.15s ease;
+}
+.btnCancel:hover {
+  color: var(--color-ink);
+}
+
+.btnSubmit {
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.btnSubmit:hover:not(:disabled) {
+  background: var(--color-primary-active, #a9583e);
+}
+.btnSubmit:disabled {
+  background: var(--color-primary-disabled, #e6dfd8);
+  color: var(--color-muted);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Save For Later Row */
 .saveForLaterRow {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 8px;
-  margin-top: 8px;
-  border-top: 1px solid var(--color-hairline);
+  padding: 7px 8px;
+  margin-top: 4px;
   cursor: pointer;
   border-radius: 6px;
   font-size: 13px;
   color: var(--color-ink);
-  transition: background 0.1s;
+  transition: background 0.15s ease;
 }
-.saveForLaterRow:hover { background: var(--color-surface-soft); }
+.saveForLaterRow:hover {
+  background: var(--color-surface-soft);
+}
 
-/* State C - newtab */
+/* State C - Newtab Page */
 .newtabState {
   padding: 4px 0;
 }
@@ -140,7 +291,7 @@
 }
 
 :global(html.dark), :global(html.dark body) {
-  background: #1a1815;  /* dark mode canvas */
+  background: #1a1815;
 }
 
 /* Toast */
@@ -157,3 +308,5 @@
   white-space: nowrap;
   z-index: 9999;
 }
+
+

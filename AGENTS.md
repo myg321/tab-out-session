@@ -66,3 +66,20 @@ pnpm build
 - Favicon handling MUST use Chrome's native `chrome-extension://<id>/_favicon/?pageUrl=` API with offline Base64 Data URL caching in `chrome.storage.local`.
 - Cloud synchronization MUST communicate directly from browser to GitHub REST API (`tab-out-session-data.json`) via secret Gists and PAT tokens with zero external servers.
 
+## Mandatory Agent Collaboration Workflow
+
+For any feature request, UI enhancement, or bug fix, agents MUST strictly follow this 3-phase collaborative workflow. All subagents MUST read the live contract from `AGENTS.md` and `DESIGN.md` at runtime instead of copying frozen rule snapshots.
+
+### Subagent Roles & Responsibilities
+
+- Product Manager Agent (PM Agent): Assesses feature proposals for product positioning (`AGENTS.md`), feasibility, trade-offs, and Chrome Extension API technical constraints. Does not dictate visual design rules.
+- UI/UX Designer Agent (Designer Agent): Owns overall visual design, typography, layout alignment, and design system tokens (`DESIGN.md`). Produces exact visual & CSS/React modification specifications.
+- Engineer Agent: Executes code implementation adhering strictly to PM/Designer specifications and performs build verification (`pnpm build`).
+
+---
+
+### Workflow Phases
+
+1. Phase 1: Pre-Assessment & Specification. Delegate feature rationale and Chrome API feasibility to the PM Agent, and visual design/layout alignment to the Designer Agent (`DESIGN.md`). Produce clear technical & visual specifications before writing code.
+2. Phase 2: Code Implementation (Engineer Agent). The Engineer Agent implements code changes strictly following Phase 1 specifications, then runs `cd extension-react && pnpm build` to verify zero TypeScript compilation or Vite bundler errors.
+3. Phase 3: Audit, Iterative Cycle & Sign-off (REPEAT Loop). Pass implemented code back to the Designer or PM Agent for visual and code-level inspection. If the audit fails or identifies flaws, repeatedly cycle through Phase 1 (revision feedback) and Phase 2 (code fixes) until explicit approval (`PASSED`) is granted. Deliver final changes only after sign-off.
