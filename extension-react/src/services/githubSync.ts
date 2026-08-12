@@ -49,7 +49,7 @@ export async function validateToken(token: string): Promise<TokenValidationResul
 /**
  * Find an existing secret Gist containing tab-out-session-data.json, or create a new one automatically.
  */
-export async function findOrCreateGist(token: string, initialPayload: SyncPayload): Promise<string> {
+export async function findOrCreateGist(token: string, initialPayload: SyncPayload): Promise<{ id: string; description: string }> {
   const cleanToken = token.trim();
   const headers = {
     Authorization: `Bearer ${cleanToken}`,
@@ -63,7 +63,7 @@ export async function findOrCreateGist(token: string, initialPayload: SyncPayloa
     const gists = await res.json();
     const existing = gists.find((g: any) => g.files && g.files[GIST_FILENAME]);
     if (existing) {
-      return existing.id;
+      return { id: existing.id, description: existing.description || 'Tab Out Session Data Backup' };
     }
   }
 
@@ -87,7 +87,110 @@ export async function findOrCreateGist(token: string, initialPayload: SyncPayloa
   }
 
   const newGist = await createRes.json();
-  return newGist.id;
+  return { id: newGist.id, description: newGist.description || GIST_DESCRIPTION };
+}
+
+/**
+ * Force creation of a brand new secret Gist on GitHub and return its Gist details.
+ */
+export async function createNewGist(token: string, initialPayload: SyncPayload, customDescription?: string): Promise<{ id: string; description: string }> {
+  const cleanToken = token.trim();
+  const headers = {
+    Authorization: `Bearer ${cleanToken}`,
+    Accept: 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+  const desc = customDescription?.trim() || GIST_DESCRIPTION;
+
+  const createRes = await fetch('https://api.github.com/gists', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      description: desc,
+      public: false,
+      files: {
+        [GIST_FILENAME]: {
+          content: JSON.stringify(initialPayload, null, 2),
+        },
+      },
+    }),
+  });
+
+  if (!createRes.ok) {
+    throw new Error(`Failed to create secret Gist: ${createRes.statusText}`);
+  }
+
+  const newGist = await createRes.json();
+  return { id: newGist.id, description: newGist.description || desc };
+}
+
+/**
+ * List all Gists owned by the user that contain tab-out-session-data.json
+ */
+export async function listTabOutGists(token: string): Promise<Array<{ id: string; description: string; updatedAt: string }>> {
+  const cleanToken = token.trim();
+  const headers = {
+    Authorization: `Bearer ${cleanToken}`,
+    Accept: 'application/vnd.github.v3+json',
+  };
+
+  const res = await fetch('https://api.github.com/gists?per_page=100', { headers });
+  if (!res.ok) {
+    throw new Error(`Failed to query user Gists (${res.status}): ${res.statusText}`);
+  }
+
+  const gists = await res.json();
+  return gists
+    .filter((g: any) => g.files && g.files[GIST_FILENAME])
+    .map((g: any) => ({
+      id: g.id,
+      description: g.description || 'Tab Out Session Data Backup',
+      updatedAt: g.updated_at || g.created_at || '',
+    }));
+}
+
+/**
+ * Update the description of a specific Gist on GitHub (Rename Gist)
+ */
+export async function renameGist(token: string, gistId: string, newDescription: string): Promise<void> {
+  const cleanToken = token.trim();
+  const headers = {
+    Authorization: `Bearer ${cleanToken}`,
+    Accept: 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+
+  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify({
+      description: newDescription.trim(),
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to rename Gist (${res.status}): ${res.statusText}`);
+  }
+}
+
+/**
+ * Delete a specific Gist on GitHub
+ */
+export async function deleteGist(token: string, gistId: string): Promise<void> {
+  const cleanToken = token.trim();
+  const headers = {
+    Authorization: `Bearer ${cleanToken}`,
+    Accept: 'application/vnd.github.v3+json',
+  };
+
+  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+    method: 'DELETE',
+    headers,
+  });
+
+  if (!res.ok && res.status !== 204) {
+    throw new Error(`Failed to delete Gist (${res.status}): ${res.statusText}`);
+  }
 }
 
 /**

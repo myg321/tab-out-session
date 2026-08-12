@@ -8,7 +8,21 @@ export function Settings() {
   const [open, setOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showWarningModal, setShowWarningModal] = useState(false);
   const { settings, updateSettings } = useStore();
+
+  const handleToggleMultiGist = () => {
+    if (!settings.allowMultiGist) {
+      setShowWarningModal(true);
+    } else {
+      updateSettings({ allowMultiGist: false });
+    }
+  };
+
+  const confirmEnableMultiGist = () => {
+    updateSettings({ allowMultiGist: true });
+    setShowWarningModal(false);
+  };
 
   const handleScroll = () => {
     setIsScrolling(true);
@@ -87,6 +101,22 @@ export function Settings() {
             onClick={() => updateSettings({ animateCompletedTab: settings.animateCompletedTab === false })}
             role="switch"
             aria-checked={settings.animateCompletedTab !== false}
+          >
+            <span className={styles.toggleThumb} />
+          </button>
+        </div>
+
+        {/* Multi-Gist Management (Advanced) */}
+        <div className={styles.settingRow}>
+          <div className={styles.settingInfo}>
+            <span className={styles.settingLabel}>Multi-Gist Management (Advanced)</span>
+            <span className={styles.settingDescription}>Allows creating or switching between multiple isolated Gist databases under the same GitHub account.</span>
+          </div>
+          <button
+            className={`${styles.toggle} ${settings.allowMultiGist ? styles.toggleOn : ''}`}
+            onClick={handleToggleMultiGist}
+            role="switch"
+            aria-checked={!!settings.allowMultiGist}
           >
             <span className={styles.toggleThumb} />
           </button>
@@ -199,12 +229,33 @@ export function Settings() {
     document.body
   ) : null;
 
+  const warningModal = showWarningModal ? createPortal(
+    <div className={styles.overlay} onClick={() => setShowWarningModal(false)}>
+      <div className={styles.warningModal} onClick={e => e.stopPropagation()}>
+        <div className={styles.warningTitle}>Enable Multi-Gist Management?</div>
+        <p className={styles.warningText}>
+          This is an advanced developer feature. When enabled, you can create or bind multiple isolated Gist databases under the same GitHub account. Changing Gist IDs will separate sync stores between devices. Are you sure you want to proceed?
+        </p>
+        <div className={styles.warningActions}>
+          <button className={styles.btnSecondary} onClick={() => setShowWarningModal(false)}>
+            Cancel
+          </button>
+          <button className={styles.btnPrimary} onClick={confirmEnableMultiGist}>
+            Enable Advanced Mode
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  ) : null;
+
   return (
     <>
       <button className={styles.gearBtn} onClick={() => setOpen(true)} title="Settings">
         <GearSix size={18} />
       </button>
       {modal}
+      {warningModal}
     </>
   );
 }

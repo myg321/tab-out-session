@@ -41,6 +41,7 @@ export interface SessionUIState {
 export interface SyncConfig {
   token: string;
   gistId: string;
+  gistDescription?: string;
   autoSync: boolean;
   lastSyncedAt: number | null;
   username: string | null;
@@ -72,10 +73,18 @@ export interface Settings {
   showFocusMode?: boolean;
   showPinnedTabs: boolean;
   hidePwaTabs?: boolean;
+  allowMultiGist?: boolean;
   theme: 'light' | 'dark' | 'auto';
   autoCloseOnSave: boolean;
   animateCompletedTab?: boolean;
   itemAppendOrder?: ItemAppendOrder;
+}
+
+export interface GistItem {
+  id: string;
+  description: string;
+  updatedAt: string;
+  isCurrent?: boolean;
 }
 
 export interface TabOutSessionStorage {

@@ -12,11 +12,16 @@ import {
   SessionColor,
   SyncConfig,
   SyncPayload,
+  GistItem,
   SAVE_FOR_LATER_ID
 } from '../types';
 import {
   validateToken,
   findOrCreateGist,
+  createNewGist,
+  listTabOutGists,
+  renameGist,
+  deleteGist,
   fetchRemoteGist,
   uploadRemoteGist,
   mergeSyncPayloads
@@ -76,6 +81,11 @@ interface StoreActions {
   uploadToCloud: (options?: { showToast?: boolean }) => Promise<void>;
   downloadFromCloud: (options?: { showToast?: boolean }) => Promise<void>;
   toggleAutoSync: (autoSync: boolean) => Promise<void>;
+  createNewIsolatedGist: (customDescription?: string) => Promise<boolean>;
+  switchGistId: (gistId: string, customDescription?: string) => Promise<boolean>;
+  fetchAvailableGists: () => Promise<GistItem[]>;
+  renameGistInCloud: (gistId: string, newDescription: string) => Promise<boolean>;
+  deleteGistFromCloud: (gistId: string) => Promise<boolean>;
 }
 
 type Store = StoreState & StoreActions;
@@ -90,6 +100,7 @@ const defaultState: TabOutSessionStorage & { faviconCache: Record<string, string
   settings: {
     showPinnedTabs: true,
     hidePwaTabs: true,
+    allowMultiGist: false,
     theme: 'auto',
     autoCloseOnSave: false,
     animateCompletedTab: true,
@@ -611,10 +622,11 @@ export const useStore = create<Store>((set, get) => ({
     };
 
     try {
-      const gistId = await findOrCreateGist(token, initialPayload);
+      const gistInfo = await findOrCreateGist(token, initialPayload);
       const syncConfig: SyncConfig = {
         token: token.trim(),
-        gistId,
+        gistId: gistInfo.id,
+        gistDescription: gistInfo.description,
         autoSync: true,
         lastSyncedAt: Date.now(),
         username: val.username,
@@ -786,5 +798,140 @@ export const useStore = create<Store>((set, get) => ({
       await chrome.storage.local.set({ syncConfig: updatedConfig });
     }
     set({ syncConfig: updatedConfig });
+  },
+
+  createNewIsolatedGist: async (customDescription) => {
+    const syncConfig = get().syncConfig;
+    if (!syncConfig || !syncConfig.token) {
+      get().showToast('Please connect GitHub token first');
+      return false;
+    }
+    set({ syncStatus: 'syncing', syncError: null });
+    const { sessions, quickSites, saveForLater, trash, settings } = get();
+    const payload: SyncPayload = {
+      meta: {
+        schemaVersion: 1,
+        lastSyncedAt: Date.now(),
+        deviceName: navigator.userAgent.includes('Mac') ? 'Mac Device' : 'Desktop Device',
+      },
+      data: { sessions, quickSites, saveForLater, trash, settings },
+    };
+
+    try {
+      const gistInfo = await createNewGist(syncConfig.token, payload, customDescription);
+      const updatedConfig: SyncConfig = {
+        ...syncConfig,
+        gistId: gistInfo.id,
+        gistDescription: gistInfo.description,
+        lastSyncedAt: Date.now(),
+      };
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        await chrome.storage.local.set({ syncConfig: updatedConfig });
+      }
+      set({ syncConfig: updatedConfig, syncStatus: 'synced', syncError: null });
+      get().showToast('Created & bound new isolated Gist');
+      return true;
+    } catch (err: any) {
+      set({ syncStatus: 'error', syncError: err.message });
+      get().showToast(`Failed to create Gist: ${err.message}`);
+      return false;
+    }
+  },
+
+  switchGistId: async (gistId, customDescription) => {
+    const syncConfig = get().syncConfig;
+    if (!syncConfig || !syncConfig.token) {
+      get().showToast('Please connect GitHub token first');
+      return false;
+    }
+    const cleanGistId = gistId.trim();
+    if (!cleanGistId) return false;
+    set({ syncStatus: 'syncing', syncError: null });
+
+    try {
+      const remotePayload = await fetchRemoteGist(syncConfig.token, cleanGistId);
+      const updatedConfig: SyncConfig = {
+        ...syncConfig,
+        gistId: cleanGistId,
+        gistDescription: customDescription || syncConfig.gistDescription || 'Tab Out Session Data Backup',
+        lastSyncedAt: Date.now(),
+      };
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        await chrome.storage.local.set({ syncConfig: updatedConfig });
+      }
+      set({ syncConfig: updatedConfig, syncStatus: 'synced', syncError: null });
+      
+      // Download remote payload to local store
+      await get().downloadFromCloud({ showToast: false });
+      get().showToast('Switched Gist ID successfully');
+      return true;
+    } catch (err: any) {
+      set({ syncStatus: 'error', syncError: err.message });
+      get().showToast(`Failed to switch Gist: ${err.message}`);
+      return false;
+    }
+  },
+
+  fetchAvailableGists: async () => {
+    const syncConfig = get().syncConfig;
+    if (!syncConfig || !syncConfig.token) return [];
+    try {
+      const list = await listTabOutGists(syncConfig.token);
+      return list.map(g => ({
+        ...g,
+        isCurrent: g.id === syncConfig.gistId,
+      }));
+    } catch (err: any) {
+      console.warn('Failed to fetch Gists list:', err);
+      return [];
+    }
+  },
+
+  renameGistInCloud: async (gistId, newDescription) => {
+    const syncConfig = get().syncConfig;
+    if (!syncConfig || !syncConfig.token) {
+      get().showToast('Please connect GitHub token first');
+      return false;
+    }
+    const cleanDesc = newDescription.trim();
+    if (!cleanDesc) return false;
+
+    try {
+      await renameGist(syncConfig.token, gistId, cleanDesc);
+      if (gistId === syncConfig.gistId) {
+        const updatedConfig = { ...syncConfig, gistDescription: cleanDesc };
+        if (typeof chrome !== 'undefined' && chrome.storage) {
+          await chrome.storage.local.set({ syncConfig: updatedConfig });
+        }
+        set({ syncConfig: updatedConfig });
+      }
+      get().showToast('Renamed Gist successfully');
+      return true;
+    } catch (err: any) {
+      get().showToast(`Rename failed: ${err.message}`);
+      return false;
+    }
+  },
+
+  deleteGistFromCloud: async (gistId) => {
+    const syncConfig = get().syncConfig;
+    if (!syncConfig || !syncConfig.token) {
+      get().showToast('Please connect GitHub token first');
+      return false;
+    }
+
+    try {
+      await deleteGist(syncConfig.token, gistId);
+      if (gistId === syncConfig.gistId) {
+        await get().disconnectSync();
+        get().showToast('Deleted active Gist & disconnected sync');
+      } else {
+        get().showToast('Deleted Gist successfully');
+      }
+      return true;
+    } catch (err: any) {
+      get().showToast(`Delete failed: ${err.message}`);
+      return false;
+    }
   },
 }));

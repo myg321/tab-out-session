@@ -224,3 +224,68 @@
   align-items: center;
   gap: 10px;
 }
+
+/* Warning Modal for Advanced Multi-Gist */
+.warningModal {
+  background: var(--color-canvas);
+  padding: 24px 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-hairline);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 12px 48px rgba(20, 20, 19, 0.2);
+}
+
+.warningTitle {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 12px;
+}
+
+.warningText {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.warningActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btnSecondary {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--color-hairline);
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btnSecondary:hover {
+  background: var(--color-surface-soft);
+}
+
+.btnPrimary {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btnPrimary:hover {
+  opacity: 0.9;
+}

@@ -19,7 +19,7 @@
 }
 
 .modal {
-  width: 460px;
+  width: 500px;
   max-width: 90vw;
   background: var(--color-canvas);
   border: 1px solid var(--color-hairline);
@@ -155,8 +155,14 @@
 
 .userInfo {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .username {
@@ -164,12 +170,26 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--color-ink);
+  line-height: 1.3;
+}
+
+.activeGistTitle {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.3;
+}
+
+.gistName {
+  font-weight: 600;
+  color: var(--color-ink);
 }
 
 .subText {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-muted);
+  line-height: 1.3;
 }
 
 .statusCardActions {
@@ -235,4 +255,283 @@
   font-size: 13px;
   color: var(--color-ink);
   cursor: pointer;
+}
+
+/* Advanced Multi-Gist Section */
+.advancedSection {
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.advancedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.advancedActions {
+  display: flex;
+  gap: 6px;
+}
+
+.smallActionBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.smallActionBtn:hover {
+  background: var(--color-surface-cream-strong);
+}
+
+.subForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--color-surface-soft);
+  border-radius: 10px;
+  border: 1px solid var(--color-hairline);
+}
+
+.subFormActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btnSecondary {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.btnSecondary:hover {
+  background: var(--color-surface-cream-strong);
+}
+
+.customIdRow {
+  display: flex;
+  gap: 8px;
+}
+
+.loadingText {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 8px 0;
+}
+
+.gistItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+  margin-top: 6px;
+}
+
+.gistItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.gistItem:hover:not(.gistItemCurrent) {
+  border-color: var(--color-muted-soft);
+  background: var(--color-surface-soft);
+}
+
+.gistItemCurrent {
+  border-color: var(--color-primary);
+  background: rgba(204, 120, 92, 0.06);
+  cursor: default;
+}
+
+.gistItemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.gistItemDesc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gistItemId {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--color-muted);
+}
+
+.gistItemRightControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.gistIconActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.gistItem:hover .gistIconActions {
+  opacity: 1;
+}
+
+.iconBtnSubtle {
+  background: transparent;
+  border: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+}
+.iconBtnSubtle:hover {
+  color: var(--color-ink);
+  background: var(--color-surface-soft);
+}
+
+.dangerIconBtn:hover {
+  color: var(--color-error);
+  background: rgba(179, 90, 90, 0.1);
+}
+
+.confirmingDelete {
+  background: var(--color-error) !important;
+  color: #fff !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+}
+
+.deleteConfirmText {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.inlineRenameForm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.inlineRenameInput {
+  flex: 1;
+  padding: 4px 8px;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-ink);
+  outline: none;
+}
+
+.inlineSaveBtn, .inlineCancelBtn {
+  padding: 4px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.inlineSaveBtn {
+  background: var(--color-primary);
+  border: none;
+  color: #fff;
+}
+
+.inlineCancelBtn {
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  color: var(--color-muted);
+}
+.inlineCancelBtn:hover {
+  color: var(--color-ink);
+}
+
+/* Equal width & height alignment for Active badge & Select button */
+.badgeCurrent {
+  width: 64px;
+  height: 28px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: rgba(204, 120, 92, 0.15);
+  border: 1px solid transparent;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.btnSelect {
+  width: 64px;
+  height: 28px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-ink);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+  margin: 0;
+}
+.btnSelect:hover {
+  background: var(--color-surface-cream-strong);
+  border-color: var(--color-muted-soft);
 }

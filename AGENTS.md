@@ -64,7 +64,7 @@ pnpm build
 - `Close All` MUST NEVER close pinned tabs (`t.pinned === true`), regardless of `settings.showPinnedTabs`.
 - `loadTabs()` MUST query `chrome.windows.getAll()` and exclude tabs in standalone PWA app windows (`w.type === 'app'`). PWA desktop app windows are strictly protected from batch closure.
 - Favicon handling MUST use Chrome's native `chrome-extension://<id>/_favicon/?pageUrl=` API with offline Base64 Data URL caching in `chrome.storage.local`.
-- Cloud synchronization MUST communicate directly from browser to GitHub REST API (`tab-out-session-data.json`) via secret Gists and PAT tokens with zero external servers.
+- Cloud synchronization MUST communicate directly from browser to GitHub REST API (`tab-out-session-data.json`) via secret Gists and PAT tokens with zero external servers. Single-Gist auto-discovery remains active by default. Advanced Multi-Gist mode requires explicit consent via `settings.allowMultiGist` toggle with warning modal before enabling.
 
 ## Mandatory Agent Collaboration Workflow
 
