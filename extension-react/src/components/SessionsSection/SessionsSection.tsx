@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowsInLineVertical, ArrowsOutLineVertical, Rows, Plus } from '@phosphor-icons/react';
 import { useStore } from '../../store';
 import { SessionCard } from '../SessionCard/SessionCard';
+import { formatCleanDomainSessionName, getLeastUsedColor } from '../../utils/sessionHelper';
 import styles from './SessionsSection.module.css';
 
 export function SessionsSection() {
-  const { sessions, createSession, reorderSessions, uiState, toggleAllSessionCardLengths } = useStore();
+  const { sessions, createSession, reorderSessions, uiState, toggleAllSessionCardLengths, showToast, removeFromSaveForLater } = useStore();
   const [showModal, setShowModal] = useState(false);
   const [sessionName, setSessionName] = useState('');
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [renamingSessionId, setRenamingSessionId] = useState<string | null>(null);
+
+  const [isTabDragging, setIsTabDragging] = useState(false);
+  const [isDropzoneOver, setIsDropzoneOver] = useState(false);
+
+  useEffect(() => {
+    const handleGlobalDragEnd = () => {
+      setIsTabDragging(false);
+      setIsDropzoneOver(false);
+    };
+    window.addEventListener('dragend', handleGlobalDragEnd);
+    window.addEventListener('drop', handleGlobalDragEnd);
+    return () => {
+      window.removeEventListener('dragend', handleGlobalDragEnd);
+      window.removeEventListener('drop', handleGlobalDragEnd);
+    };
+  }, []);
 
   const allState2 = sessions.length > 0 && sessions.every(s => !uiState[s.id]?.collapsed && uiState[s.id]?.showAllTabs);
   const allState0 = sessions.length > 0 && sessions.every(s => uiState[s.id]?.collapsed);
@@ -23,7 +40,8 @@ export function SessionsSection() {
 
   const handleConfirm = () => {
     if (sessionName.trim()) {
-      createSession(sessionName.trim(), 'clay', []);
+      const color = getLeastUsedColor(sessions);
+      createSession(sessionName.trim(), color, []);
     }
     setShowModal(false);
   };
@@ -39,8 +57,58 @@ export function SessionsSection() {
     setDragOverIndex(null);
   };
 
+  const isTabData = (e: React.DragEvent) => {
+    return e.dataTransfer.types.includes('application/x-tab-data');
+  };
+
+  const handleSectionDragOver = (e: React.DragEvent) => {
+    if (isTabData(e)) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+      if (!isTabDragging) setIsTabDragging(true);
+    }
+  };
+
+  const handleDropzoneDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsTabDragging(false);
+    setIsDropzoneOver(false);
+
+    const rawData = e.dataTransfer.getData('application/x-tab-data');
+    if (!rawData) return;
+
+    try {
+      const tab = JSON.parse(rawData) as { url: string; title?: string; favIconUrl?: string };
+      if (!tab.url) return;
+
+      const autoName = formatCleanDomainSessionName(tab.url);
+      const color = getLeastUsedColor(sessions);
+
+      createSession(autoName, color, [
+        {
+          url: tab.url,
+          title: tab.title || tab.url,
+          favIconUrl: tab.favIconUrl,
+        },
+      ]);
+      removeFromSaveForLater(tab.url);
+      showToast(`Created session "${autoName}"`);
+    } catch (err) {
+      console.error('Failed to parse tab drop data:', err);
+    }
+  };
+
   return (
-    <div className={styles.section}>
+    <div
+      className={styles.section}
+      onDragOver={handleSectionDragOver}
+      onDragLeave={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setIsTabDragging(false);
+          setIsDropzoneOver(false);
+        }
+      }}
+    >
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>Sessions</h2>
         <div className={styles.sectionLine} />
@@ -102,6 +170,24 @@ export function SessionsSection() {
             />
           </div>
         ))}
+
+        {(isTabDragging || sessions.length === 0) && (
+          <div
+            className={`${styles.dropzone} ${isDropzoneOver ? styles.dropzoneActive : ''}`}
+            onDragOver={(e) => {
+              if (isTabData(e)) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                setIsDropzoneOver(true);
+              }
+            }}
+            onDragLeave={() => setIsDropzoneOver(false)}
+            onDrop={handleDropzoneDrop}
+          >
+            <Plus size={20} className={styles.dropzoneIcon} />
+            <span className={styles.dropzoneText}>Drop to create new session</span>
+          </div>
+        )}
       </div>
       {sessions.length === 0 && <div className={styles.empty}>No sessions yet.</div>}
 

@@ -3,10 +3,11 @@ import { useStore } from '../../store';
 import { FaviconImg } from '../FaviconImg/FaviconImg';
 import { InstantTooltip } from '../InstantTooltip/InstantTooltip';
 import { TabContextMenu, closeAllMenus } from '../TabContextMenu/TabContextMenu';
+import { setCustomDragGhost } from '../../utils/sessionHelper';
 import styles from './SaveForLaterSidebar.module.css';
 
 export function SaveForLaterSidebar() {
-  const { saveForLater, markCompleted, unmarkCompleted, clearCompleted, showToast, reorderSaveForLater, settings } = useStore();
+  const { saveForLater, markCompleted, unmarkCompleted, clearCompleted, showToast, reorderSaveForLater, settings, addToSaveForLater, insertIntoSaveForLater, removeTabFromSession } = useStore();
   const [completedExpanded, setCompletedExpanded] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [tooltip, setTooltip] = useState<{ text: string; rect: DOMRect } | null>(null);
@@ -16,6 +17,73 @@ export function SaveForLaterSidebar() {
   const [draggedTabUrl, setDraggedTabUrl] = useState<string | null>(null);
   const [dropTargetUrl, setDropTargetUrl] = useState<string | null>(null);
   const [dropPos, setDropPos] = useState<'before' | 'after' | null>(null);
+
+  const [isExternalTabDragging, setIsExternalTabDragging] = useState(false);
+  const [isSidebarDropActive, setIsSidebarDropActive] = useState(false);
+
+  useEffect(() => {
+    const handleGlobalDragStart = () => setIsExternalTabDragging(true);
+    const handleGlobalDragEnd = () => {
+      setIsExternalTabDragging(false);
+      setIsSidebarDropActive(false);
+    };
+    window.addEventListener('dragstart', handleGlobalDragStart);
+    window.addEventListener('dragend', handleGlobalDragEnd);
+    window.addEventListener('drop', handleGlobalDragEnd);
+    return () => {
+      window.removeEventListener('dragstart', handleGlobalDragStart);
+      window.removeEventListener('dragend', handleGlobalDragEnd);
+      window.removeEventListener('drop', handleGlobalDragEnd);
+    };
+  }, []);
+
+  const handleSidebarDragOver = (e: React.DragEvent) => {
+    if (draggedTabUrl !== null) return;
+    if (e.dataTransfer.types.includes('application/x-tab-data')) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+      if (!isSidebarDropActive) setIsSidebarDropActive(true);
+    }
+  };
+
+  const handleSidebarDragLeave = (e: React.DragEvent) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsSidebarDropActive(false);
+    }
+  };
+
+  const handleSidebarDrop = async (e: React.DragEvent) => {
+    if (draggedTabUrl !== null) return;
+    const raw = e.dataTransfer.getData('application/x-tab-data');
+    if (!raw) return;
+
+    try {
+      const tabData = JSON.parse(raw);
+      if (!tabData.url || tabData.fromSaveForLater) return;
+
+      e.preventDefault();
+      setIsSidebarDropActive(false);
+      setIsExternalTabDragging(false);
+
+      await addToSaveForLater({
+        url: tabData.url,
+        title: tabData.title,
+        favIconUrl: tabData.favIconUrl,
+      });
+
+      if (tabData.sourceSessionId) {
+        await removeTabFromSession(tabData.sourceSessionId, tabData.url);
+      }
+
+      if (tabData.fromOpenTabs && tabData.tabId && settings.autoCloseOnSave) {
+        if (typeof chrome !== 'undefined' && chrome.tabs) {
+          await chrome.tabs.remove(tabData.tabId);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to parse sidebar drop tab data:', err);
+    }
+  };
 
   const active = saveForLater.filter(t => !t.completed);
   const completed = saveForLater.filter(t => t.completed);
@@ -60,10 +128,13 @@ export function SaveForLaterSidebar() {
   const handleDragStart = (e: React.DragEvent, tab: { url: string; title?: string; favIconUrl?: string }) => {
     setTooltip(null);
     setDraggedTabUrl(tab.url);
+    const existingImgNode = (e.currentTarget as HTMLElement)?.querySelector?.('img') as HTMLImageElement | null;
+    setCustomDragGhost(e, tab.title || tab.url, tab.favIconUrl, existingImgNode);
     const payload = JSON.stringify({
       url: tab.url,
       title: tab.title,
       favIconUrl: tab.favIconUrl,
+      fromSaveForLater: true,
     });
     e.dataTransfer.setData('application/x-tab-data', payload);
     e.dataTransfer.setData('text/plain', tab.url);
@@ -72,8 +143,16 @@ export function SaveForLaterSidebar() {
   };
 
   const handleDragOver = (e: React.DragEvent, tabUrl: string) => {
+    const isExternal = e.dataTransfer.types.includes('application/x-tab-data');
+    const isInternal = draggedTabUrl !== null;
+
+    if (!isInternal && !isExternal) return;
+    if (isInternal && draggedTabUrl === tabUrl) return;
+
     e.preventDefault();
-    if (!draggedTabUrl || draggedTabUrl === tabUrl) return;
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = isInternal ? 'move' : 'copy';
+
     const rect = e.currentTarget.getBoundingClientRect();
     const midY = rect.top + rect.height / 2;
     const isTopHalf = e.clientY < midY;
@@ -81,38 +160,81 @@ export function SaveForLaterSidebar() {
     setDropPos(isTopHalf ? 'before' : 'after');
   };
 
-  const handleDrop = (e: React.DragEvent, targetUrl: string) => {
+  const handleDrop = async (e: React.DragEvent, targetUrl: string) => {
     e.preventDefault();
-    if (!draggedTabUrl || draggedTabUrl === targetUrl) {
-      setDraggedTabUrl(null);
-      setDropTargetUrl(null);
-      setDropPos(null);
-      return;
-    }
+    e.stopPropagation();
 
-    const fromIndex = saveForLater.findIndex(t => t.url === draggedTabUrl);
-    let toIndex = saveForLater.findIndex(t => t.url === targetUrl);
+    const isInternal = draggedTabUrl !== null;
 
-    if (fromIndex !== -1 && toIndex !== -1) {
-      if (dropPos === 'after' && fromIndex < toIndex) {
-        // stay toIndex
-      } else if (dropPos === 'after' && fromIndex > toIndex) {
-        toIndex += 1;
-      } else if (dropPos === 'before' && fromIndex > toIndex) {
-        // stay toIndex
-      } else if (dropPos === 'before' && fromIndex < toIndex) {
-        toIndex -= 1;
+    if (isInternal) {
+      if (draggedTabUrl === targetUrl) {
+        setDraggedTabUrl(null);
+        setDropTargetUrl(null);
+        setDropPos(null);
+        return;
       }
-      reorderSaveForLater(fromIndex, Math.max(0, Math.min(saveForLater.length - 1, toIndex)));
+
+      const fromIndex = saveForLater.findIndex(t => t.url === draggedTabUrl);
+      let toIndex = saveForLater.findIndex(t => t.url === targetUrl);
+
+      if (fromIndex !== -1 && toIndex !== -1) {
+        if (dropPos === 'after' && fromIndex < toIndex) {
+          // stay toIndex
+        } else if (dropPos === 'after' && fromIndex > toIndex) {
+          toIndex += 1;
+        } else if (dropPos === 'before' && fromIndex > toIndex) {
+          // stay toIndex
+        } else if (dropPos === 'before' && fromIndex < toIndex) {
+          toIndex -= 1;
+        }
+        reorderSaveForLater(fromIndex, Math.max(0, Math.min(saveForLater.length - 1, toIndex)));
+      }
+    } else {
+      const raw = e.dataTransfer.getData('application/x-tab-data');
+      if (raw) {
+        try {
+          const tabData = JSON.parse(raw);
+          if (tabData.url && !tabData.fromSaveForLater) {
+            await insertIntoSaveForLater(
+              {
+                url: tabData.url,
+                title: tabData.title,
+                favIconUrl: tabData.favIconUrl,
+              },
+              targetUrl,
+              dropPos || 'before'
+            );
+
+            if (tabData.sourceSessionId) {
+              await removeTabFromSession(tabData.sourceSessionId, tabData.url);
+            }
+
+            if (tabData.fromOpenTabs && tabData.tabId && settings.autoCloseOnSave) {
+              if (typeof chrome !== 'undefined' && chrome.tabs) {
+                await chrome.tabs.remove(tabData.tabId);
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Failed to parse tab drop data:', err);
+        }
+      }
     }
 
     setDraggedTabUrl(null);
     setDropTargetUrl(null);
     setDropPos(null);
+    setIsSidebarDropActive(false);
+    setIsExternalTabDragging(false);
   };
 
   return (
-    <aside className={styles.sidebar}>
+    <aside
+      className={`${styles.sidebar} ${isSidebarDropActive ? styles.sidebarDropzoneActive : ''}`}
+      onDragOver={handleSidebarDragOver}
+      onDragLeave={handleSidebarDragLeave}
+      onDrop={handleSidebarDrop}
+    >
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>Saved</h2>
         <div className={styles.sectionLine} />

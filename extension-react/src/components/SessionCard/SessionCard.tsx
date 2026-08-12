@@ -6,6 +6,7 @@ import { FaviconImg } from '../FaviconImg/FaviconImg';
 import { InstantTooltip } from '../InstantTooltip/InstantTooltip';
 import { TabContextMenu, closeAllMenus } from '../TabContextMenu/TabContextMenu';
 import { DotsThree, X, CaretDown, CaretUp, CaretDoubleDown, ArrowSquareOut, SquaresFour, TrashSimple, Copy, PencilSimple } from '@phosphor-icons/react';
+import { setCustomDragGhost } from '../../utils/sessionHelper';
 import styles from './SessionCard.module.css';
 
 const SESSION_COLORS: { value: string; hex: string; label: string }[] = [
@@ -380,6 +381,8 @@ export function SessionCard({ session, onRenameStart, onRenameEnd, onHeaderDragS
                   e.stopPropagation();
                   setTooltip(null);
                   setDraggingTabIndex(i);
+                  const existingImgNode = (e.currentTarget as HTMLElement)?.querySelector?.('img') as HTMLImageElement | null;
+                  setCustomDragGhost(e, tab.title || tab.url, tab.favIconUrl, existingImgNode);
                   const payload = JSON.stringify({
                     url: tab.url,
                     title: tab.title,

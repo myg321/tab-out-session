@@ -6,6 +6,7 @@ import { FaviconImg } from '../FaviconImg/FaviconImg';
 import { InstantTooltip } from '../InstantTooltip/InstantTooltip';
 import { TabContextMenu, closeAllMenus } from '../TabContextMenu/TabContextMenu';
 import { SavedTab, Session } from '../../types';
+import { setCustomDragGhost } from '../../utils/sessionHelper';
 import styles from './OpenTabsSection.module.css';
 
 function displaySessionName(name: string): string {
@@ -714,10 +715,14 @@ export function OpenTabsSection() {
                       draggable
                       onDragStart={(e) => {
                         setTooltip(null);
+                        const existingImgNode = (e.currentTarget as HTMLElement)?.querySelector?.('img') as HTMLImageElement | null;
+                        setCustomDragGhost(e, tab.title || tab.url, tab.favIconUrl, existingImgNode);
                         const payload = JSON.stringify({
                           url: tab.url,
                           title: tab.title,
                           favIconUrl: tab.favIconUrl,
+                          fromOpenTabs: true,
+                          tabId: tab.id,
                         });
                         e.dataTransfer.setData('application/x-tab-data', payload);
                         e.dataTransfer.setData('text/plain', tab.url);

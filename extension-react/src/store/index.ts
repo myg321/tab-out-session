@@ -62,6 +62,8 @@ interface StoreActions {
   reorderQuickSites: (newIds: string[]) => void;
   reorderSessions: (ids: string[]) => Promise<void>;
   addToSaveForLater: (tab: SavedTab) => void;
+  insertIntoSaveForLater: (tab: SavedTab, targetUrl?: string, position?: 'before' | 'after') => Promise<void>;
+  removeFromSaveForLater: (url: string) => void;
   markCompleted: (url: string) => void;
   unmarkCompleted: (url: string) => void;
   clearCompleted: () => void;
@@ -310,16 +312,33 @@ export const useStore = create<Store>((set, get) => ({
   },
 
   removeTabFromSession: async (sessionId, tabUrl) => {
-    const sessions = get().sessions.map(s => {
-      if (s.id === sessionId) {
-        return { ...s, tabs: s.tabs.filter(t => t.url !== tabUrl) };
-      }
-      return s;
-    });
-    if (typeof chrome !== 'undefined' && chrome.storage) {
-      await chrome.storage.local.set({ sessions });
-    } else {
+    const session = get().sessions.find(s => s.id === sessionId);
+    if (!session) return;
+    const remainingTabs = session.tabs.filter(t => t.url !== tabUrl);
+
+    if (remainingTabs.length === 0) {
+      const sessions = get().sessions.filter(s => s.id !== sessionId);
       set({ sessions });
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        await chrome.storage.local.set({ sessions });
+      }
+      if (get().syncConfig?.token) {
+        get().uploadToCloud({ showToast: false });
+      }
+    } else {
+      const sessions = get().sessions.map(s => {
+        if (s.id === sessionId) {
+          return { ...s, tabs: remainingTabs };
+        }
+        return s;
+      });
+      set({ sessions });
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        await chrome.storage.local.set({ sessions });
+      }
+      if (get().syncConfig?.token) {
+        get().uploadToCloud({ showToast: false });
+      }
     }
   },
 
@@ -428,6 +447,50 @@ export const useStore = create<Store>((set, get) => ({
       await chrome.storage.local.set({ saveForLater });
     }
     get().showToast(`Saved for later`);
+    if (get().syncConfig?.token) {
+      get().uploadToCloud({ showToast: false });
+    }
+  },
+
+  insertIntoSaveForLater: async (tab, targetUrl, position = 'before') => {
+    const current = get().saveForLater;
+    const filtered = current.filter(t => t.url !== tab.url);
+    const now = Date.now();
+    const newItem: SaveForLaterTab = { ...tab, completed: false, updatedAt: now };
+
+    let insertIndex = -1;
+    if (targetUrl) {
+      const targetIdx = filtered.findIndex(t => t.url === targetUrl);
+      if (targetIdx !== -1) {
+        insertIndex = position === 'after' ? targetIdx + 1 : targetIdx;
+      }
+    }
+
+    let updatedList: SaveForLaterTab[];
+    if (insertIndex !== -1) {
+      updatedList = [...filtered];
+      updatedList.splice(insertIndex, 0, newItem);
+    } else {
+      const order = get().settings.itemAppendOrder?.saveForLater || 'end';
+      updatedList = order === 'front' ? [newItem, ...filtered] : [...filtered, newItem];
+    }
+
+    set({ saveForLater: updatedList });
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      await chrome.storage.local.set({ saveForLater: updatedList });
+    }
+    get().showToast('Saved for later');
+    if (get().syncConfig?.token) {
+      get().uploadToCloud({ showToast: false });
+    }
+  },
+
+  removeFromSaveForLater: async (url) => {
+    const saveForLater = get().saveForLater.filter(t => t.url !== url);
+    set({ saveForLater });
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      await chrome.storage.local.set({ saveForLater });
+    }
     if (get().syncConfig?.token) {
       get().uploadToCloud({ showToast: false });
     }

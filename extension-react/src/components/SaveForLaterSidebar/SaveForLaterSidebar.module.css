@@ -11,6 +11,13 @@
   top: 24px;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Active Dropzone state when dragging tab over sidebar */
+.sidebarDropzoneActive {
+  border: 1.5px solid var(--color-primary) !important;
+  background-color: rgba(204, 120, 92, 0.06) !important;
 }
 
 
@@ -62,6 +69,7 @@
   height: 2px;
   background: var(--color-primary);
   z-index: 10;
+  pointer-events: none;
 }
 
 .dropIndicatorAfter::after {
@@ -73,6 +81,7 @@
   height: 2px;
   background: var(--color-primary);
   z-index: 10;
+  pointer-events: none;
 }
 
 .checkbox {

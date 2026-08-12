@@ -180,3 +180,53 @@
   border-radius: var(--radius-lg);
   outline-offset: 3px;
 }
+
+/* ==========================================
+   Dropzone Card Placeholder (DESIGN.md)
+   ========================================== */
+.dropzone {
+  min-height: 120px;
+  border: 1.5px dashed var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  cursor: copy;
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.dropzoneActive {
+  border: 1.5px solid var(--color-primary) !important;
+  background: rgba(204, 120, 92, 0.06) !important;
+}
+
+.dropzoneIcon {
+  color: var(--color-muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.dropzoneActive .dropzoneIcon {
+  color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.dropzoneText {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted);
+  letter-spacing: 0;
+  transition: color 0.2s ease;
+}
+
+.dropzoneActive .dropzoneText {
+  color: var(--color-primary);
+}
+
