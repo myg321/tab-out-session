@@ -252,6 +252,28 @@
   border-radius: 6px;
 }
 
+/* ==========================================
+   Form Validation UI Tokens (DESIGN.md)
+   ========================================== */
+.inputError {
+  border-color: var(--color-error) !important;
+}
+
+.inputError:focus {
+  border-color: var(--color-error) !important;
+  box-shadow: 0 0 0 2px rgba(198, 69, 69, 0.15) !important;
+}
+
+.errorMessage {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-error);
+  margin-top: -6px;
+  margin-bottom: 4px;
+  display: block;
+  line-height: 1.4;
+}
+
 .contextDivider {
   height: 1px;
   background: var(--color-hairline);

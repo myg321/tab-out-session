@@ -320,6 +320,7 @@ export function OpenTabsSection() {
   const [collapsedDomains, setCollapsedDomains] = useState<Set<string>>(new Set());
   const [showSavePopover, setShowSavePopover] = useState(false);
   const [saveName, setSaveName] = useState('');
+  const [saveNameError, setSaveNameError] = useState('');
   const [saveColor, setSaveColor] = useState<typeof SESSION_COLORS[number]>('clay');
   const [closeAfter, setCloseAfter] = useState(false);
   const [saveGroupTabs, setSaveGroupTabs] = useState<SavedTab[] | null>(null);
@@ -483,33 +484,46 @@ export function OpenTabsSection() {
     setSaveColor(SESSION_COLORS[Math.floor(Math.random() * SESSION_COLORS.length)]);
     setCloseAfter(false);
     setSaveGroupTabs(null);
+    setSaveNameError('');
     setShowSavePopover(true);
   };
 
   const confirmSaveSession = async () => {
-    if (!saveName.trim()) return;
-    const sourceTabs: SavedTab[] = saveGroupTabs
-      ? saveGroupTabs
-      : tabs.map(t => ({
-          url: t.url,
-          title: t.title,
-          favIconUrl: getFavicon(t.url, t.favIconUrl),
-        }));
-
-    await createSession(saveName.trim(), saveColor, sourceTabs, closeAfter);
-    showToast(`Saved session "${saveName.trim()}"`);
-
-    if (closeAfter && typeof chrome !== 'undefined' && chrome.tabs) {
-      const idsToClose = saveGroupTabs
-        ? saveGroupTabs.map(st => tabs.find(t => t.url === st.url)?.id).filter(Boolean) as number[]
-        : tabs.map(t => t.id);
-      if (idsToClose.length > 0) {
-        await chrome.tabs.remove(idsToClose);
-      }
+    const trimmedName = saveName.trim();
+    if (!trimmedName) {
+      setSaveNameError('Session name is required');
+      return;
     }
+    setSaveNameError('');
 
-    setShowSavePopover(false);
-    setSaveGroupTabs(null);
+    try {
+      const sourceTabs: SavedTab[] = saveGroupTabs
+        ? saveGroupTabs
+        : tabs.map(t => ({
+            url: t.url,
+            title: t.title,
+            favIconUrl: getFavicon(t.url, t.favIconUrl),
+          }));
+
+      await createSession(trimmedName, saveColor, sourceTabs, closeAfter);
+      showToast(`Saved session "${trimmedName}"`);
+
+      if (closeAfter && typeof chrome !== 'undefined' && chrome.tabs) {
+        const idsToClose = saveGroupTabs
+          ? saveGroupTabs.map(st => tabs.find(t => t.url === st.url)?.id).filter(Boolean) as number[]
+          : tabs.map(t => t.id);
+        if (idsToClose.length > 0) {
+          await chrome.tabs.remove(idsToClose);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to save session:', err);
+      showToast('Failed to save session');
+    } finally {
+      setShowSavePopover(false);
+      setSaveGroupTabs(null);
+      setSaveNameError('');
+    }
   };
 
   const addTabToSession = (tab: LiveTab, sessionId: string) => {
@@ -590,6 +604,7 @@ export function OpenTabsSection() {
       title: t.title,
       favIconUrl: getFavicon(t.url, t.favIconUrl),
     })));
+    setSaveNameError('');
     setShowSavePopover(true);
   };
 
@@ -841,13 +856,17 @@ export function OpenTabsSection() {
           <div className={styles.popover} onClick={e => e.stopPropagation()}>
             <h3 className={styles.popoverTitle}>{saveGroupTabs ? 'Save tabs as session' : 'Save all tabs as session'}</h3>
             <input
-              className={styles.nameInput}
+              className={`${styles.nameInput} ${saveNameError ? styles.inputError : ''}`}
               value={saveName}
-              onChange={e => setSaveName(e.target.value)}
+              onChange={e => {
+                setSaveName(e.target.value);
+                if (saveNameError) setSaveNameError('');
+              }}
               placeholder="Session name…"
               autoFocus
               onKeyDown={e => { if (e.key === 'Enter') confirmSaveSession(); if (e.key === 'Escape') setShowSavePopover(false); }}
             />
+            {saveNameError && <span className={styles.errorMessage}>{saveNameError}</span>}
             <div className={styles.colorPicker}>
               {SESSION_COLORS_MAP.map(c => (
                 <button

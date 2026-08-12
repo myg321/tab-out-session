@@ -26,6 +26,8 @@ export function QuickSites() {
   const [showModal, setShowModal] = useState(false);
   const [inputUrl, setInputUrl] = useState('');
   const [inputName, setInputName] = useState('');
+  const [urlError, setUrlError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [customIconDataUrl, setCustomIconDataUrl] = useState('');
   const [customIconShape, setCustomIconShape] = useState<'squircle' | 'circle'>('squircle');
   const [pastedImageUrl, setPastedImageUrl] = useState('');
@@ -38,6 +40,8 @@ export function QuickSites() {
   const [editModal, setEditModal] = useState<{ siteId: string } | null>(null);
   const [editName, setEditName] = useState('');
   const [editUrl, setEditUrl] = useState('');
+  const [editUrlError, setEditUrlError] = useState('');
+  const [editNameError, setEditNameError] = useState('');
   const [editIconDataUrl, setEditIconDataUrl] = useState('');
   const [editIconShape, setEditIconShape] = useState<'squircle' | 'circle'>('squircle');
   const [editPastedImageUrl, setEditPastedImageUrl] = useState('');
@@ -77,17 +81,41 @@ export function QuickSites() {
   const handleAdd = () => {
     let url = inputUrl.trim();
     const name = inputName.trim();
-    if (!url || !name) return;
+
+    let hasError = false;
+    setUrlError('');
+    setNameError('');
+
+    if (!url) {
+      setUrlError('URL is required');
+      hasError = true;
+    }
+    if (!name) {
+      setNameError('Site name is required');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-    try { new URL(url); } catch { alert('Invalid URL'); return; }
+    try {
+      new URL(url);
+    } catch {
+      setUrlError('Invalid URL format');
+      return;
+    }
+
     addQuickSite({
       name,
       url,
       customIconUrl: customIconDataUrl || undefined,
       iconShape: customIconDataUrl ? customIconShape : undefined,
     });
+
     setInputUrl('');
     setInputName('');
+    setUrlError('');
+    setNameError('');
     setCustomIconDataUrl('');
     setPastedImageUrl('');
     setShowModal(false);
@@ -98,6 +126,8 @@ export function QuickSites() {
     if (!site) return;
     setEditName(site.name);
     setEditUrl(site.url);
+    setEditUrlError('');
+    setEditNameError('');
     setEditIconDataUrl(site.customIconUrl || '');
     setEditIconShape(site.iconShape || 'squircle');
     setEditPastedImageUrl('');
@@ -106,13 +136,43 @@ export function QuickSites() {
 
   const handleEditSave = () => {
     if (!editModal) return;
+
+    let url = editUrl.trim();
+    const name = editName.trim();
+
+    let hasError = false;
+    setEditUrlError('');
+    setEditNameError('');
+
+    if (!url) {
+      setEditUrlError('URL is required');
+      hasError = true;
+    }
+    if (!name) {
+      setEditNameError('Site name is required');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+    try {
+      new URL(url);
+    } catch {
+      setEditUrlError('Invalid URL format');
+      return;
+    }
+
     updateQuickSite(editModal.siteId, {
-      name: editName.trim() || undefined,
-      url: editUrl.trim(),
+      name,
+      url,
       customIconUrl: editIconDataUrl || undefined,
       iconShape: editIconDataUrl ? editIconShape : undefined,
     });
+
     setEditModal(null);
+    setEditUrlError('');
+    setEditNameError('');
   };
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
@@ -155,15 +215,31 @@ export function QuickSites() {
     <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <h3 className={styles.modalTitle}>Add Quick Site</h3>
-        <input className={styles.modalInput} placeholder="URL (e.g. github.com)" value={inputUrl}
-          onChange={e => setInputUrl(e.target.value)}
+        <input
+          className={`${styles.modalInput} ${urlError ? styles.inputError : ''}`}
+          placeholder="URL (e.g. github.com)"
+          value={inputUrl}
+          onChange={e => {
+            setInputUrl(e.target.value);
+            if (urlError) setUrlError('');
+          }}
           onKeyDown={e => e.key === 'Enter' && handleAdd()}
           autoFocus
         />
-        <input className={styles.modalInput} placeholder="Name" value={inputName}
-          onChange={e => setInputName(e.target.value)}
+        {urlError && <span className={styles.errorMessage}>{urlError}</span>}
+
+        <input
+          className={`${styles.modalInput} ${nameError ? styles.inputError : ''}`}
+          placeholder="Name"
+          value={inputName}
+          onChange={e => {
+            setInputName(e.target.value);
+            if (nameError) setNameError('');
+          }}
           onKeyDown={e => e.key === 'Enter' && handleAdd()}
         />
+        {nameError && <span className={styles.errorMessage}>{nameError}</span>}
+
         <div className={styles.iconUploadSection}>
           <label className={styles.iconUploadLabel}>Custom icon (optional)</label>
           <div className={styles.iconUploadRow}>
@@ -225,15 +301,30 @@ export function QuickSites() {
     <div className={styles.modalOverlay} onClick={() => setEditModal(null)}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <h3 className={styles.modalTitle}>Edit Site</h3>
-        <input className={styles.modalInput} placeholder="URL" value={editUrl}
-          onChange={e => setEditUrl(e.target.value)}
+        <input
+          className={`${styles.modalInput} ${editUrlError ? styles.inputError : ''}`}
+          placeholder="URL"
+          value={editUrl}
+          onChange={e => {
+            setEditUrl(e.target.value);
+            if (editUrlError) setEditUrlError('');
+          }}
           onKeyDown={e => e.key === 'Enter' && handleEditSave()}
           autoFocus
         />
-        <input className={styles.modalInput} placeholder="Name" value={editName}
-          onChange={e => setEditName(e.target.value)}
+        {editUrlError && <span className={styles.errorMessage}>{editUrlError}</span>}
+
+        <input
+          className={`${styles.modalInput} ${editNameError ? styles.inputError : ''}`}
+          placeholder="Name"
+          value={editName}
+          onChange={e => {
+            setEditName(e.target.value);
+            if (editNameError) setEditNameError('');
+          }}
           onKeyDown={e => e.key === 'Enter' && handleEditSave()}
         />
+        {editNameError && <span className={styles.errorMessage}>{editNameError}</span>}
         <div className={styles.iconUploadSection}>
           <label className={styles.iconUploadLabel}>Custom icon (optional)</label>
           <div className={styles.iconUploadRow}>
