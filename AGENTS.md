@@ -41,7 +41,7 @@ Before accepting a new feature or UX change, answer these questions:
 - `.agents/skills/` is the canonical home for project skills:
   - `.agents/skills/install-extension/SKILL.md`: Runbook for automated Chrome extension setup, compilation, and path copy.
   - `.agents/skills/release-flow/SKILL.md`: Runbook for version tag conventions, `RELEASE_NOTES.md` formatting, and release verification.
-  - `.agents/skills/git-workflow/SKILL.md`: Runbook for pre-commit build verification, Conventional Commits format, and pushing changes.
+  - `.agents/skills/git-commit-push/SKILL.md`: Automated runbook for pre-commit build verification, Conventional Commits format, and pushing changes.
 - `extension-react/`: Active React 18 / TypeScript 5 / Vite codebase and UI components.
 - `RELEASE_NOTES.md`: Target release notes consumed by GitHub Actions `release.yml`.
 
