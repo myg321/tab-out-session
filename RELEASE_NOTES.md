@@ -1,19 +1,26 @@
-## 🌿 Tab Out Session v1.2.0
+## Tab Out Session v1.3.0
 
-> 🚀 **Version Highlight**: Added standalone PWA application window filtering for a cleaner Open Tabs workspace.
+> **Version Highlight**: Introducing bi-directional cross-sectional drag & drop with live insertion indicators, advanced Multi-Gist database sync management, an expanded two-column settings dashboard, and Chrome native favicon rendering for seamless tab management.
 
 ---
 
 ### 🚀 What's New
 
-- 📱 **PWA App Window Control**: Added `"Hide PWA app tabs in Open Tabs"` setting (enabled by default) to automatically filter out desktop PWA windows (Google Calendar, Notion, Teams, etc.) from Open Tabs and protect them from batch closure.
+- **Bi-Directional Cross-Sectional Drag & Drop**: Drag tabs seamlessly between Save for Later sidebar, Session Cards, and Open Tabs with live target position insertion lines and automatic cleanup of empty session cards.
+- **Advanced Multi-Gist Cloud Sync Management**: Create, switch, bind, rename, or delete multiple isolated Gist backup databases under a single GitHub account to separate personal and work sync environments across devices.
+- **Expanded Two-Column Settings Dashboard**: Restructured Settings modal into a spacious two-column grouped card layout, displaying all preference options above the fold with zero vertical scrolling and comfortable typography.
+- **Chrome Native Favicon Engine**: Integrated Chrome's internal favicon database across Quick Sites and Session cards, ensuring instant, offline-capable icon rendering for domestic sites (e.g. Xiaohongshu) without external network calls.
+- **Popup Inline Session Creation**: Added inline new session creation and 1-click current tab parking directly from the Chrome extensions toolbar popup menu.
 
 ### 🐛 Bug Fixes & Refinements
 
-- 📦 **Dist Package Root Structure**: Updated GitHub Release ZIP archiving path so `manifest.json` sits directly at the zip root, enabling 1-click loading without folder nesting errors.
+- **Quick Site Form Validation**: Added clear visual error feedback when required URL or Name fields are missing during site creation, plus guaranteed auto-closing of the Save Session confirmation modal.
+- **Session Title Hover Preview**: Added instant hover tooltip preview for truncated session names matching original title font size and weight.
+- **Drag Ghost Preview Unification**: Standardized drag ghost preview cards across all sections with warm surface backgrounds, borders, floating shadows, and instant favicon rendering on the very first drag.
 
 ---
 
 ### 📦 Installation
 
-Download `tab-out-session-v1.2.0.zip` from **Assets** below, extract, and load into Chrome (`chrome://extensions`).
+Download `tab-out-session-v1.3.0.zip` from **Assets** below, extract, and load into Chrome (`chrome://extensions`).
+

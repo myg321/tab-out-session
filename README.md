@@ -76,7 +76,7 @@ Tab Out Session is built with privacy as a fundamental constraint:
 - **Card and Tab Drag-and-Drop Reordering**:
   - **Card Reordering**: Drag any session card by its title bar to rearrange your session grid.
   - **Intra-Session Tab Reordering**: Drag saved links within a session card to reorder your workflow sequence.
-  - **Inter-Session Tab Dragging**: Drag tabs from one session card directly into another session card.
+  - **Inter-Session & Cross-Sectional Dragging**: Drag tabs seamlessly between Save for Later sidebar, Session Cards, and Open Tabs with live position insertion lines and automatic cleanup of empty 0-tab session cards.
 - **Earth & Gem Color Tagging**: Organize work, research, personal, and project sessions using 8 curated color palettes (clay, sage, slate, terra, rose, moss, indigo, sand).
 - **Flexible Restoration**: Restore entire sessions in your current window or spin up a dedicated Chrome window.
 - **30-Day Trash Retention**: Accidental session deletions move to a local Trash Bin with 30-day retention and one-click restoration.
@@ -97,6 +97,7 @@ Tab Out Session is built with privacy as a fundamental constraint:
 
 - **Direct GitHub REST Integration**: Communicates directly with GitHub's HTTPS API using Personal Access Tokens.
 - **Secret Gist Storage**: Data is saved into an isolated, secret GitHub Gist, giving you 100% control over your personal data.
+- **Multi-Gist Database Management (Advanced Mode)**: Create, switch, bind, rename, or delete multiple isolated Gist backup databases under a single GitHub account to separate sync stores across different computers.
 - **Bi-directional State & Order Merging**: Synchronizes Sessions, custom drag-and-drop order positions, Quick Sites, Save for Later items, and user Settings across multiple computers without resurrecting deleted items.
 - **Live Status Indicator**: Visual header badge reflecting real-time sync state (Synced, Syncing, Sync error).
 
