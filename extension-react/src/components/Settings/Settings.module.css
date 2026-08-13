@@ -16,7 +16,10 @@
   transition: color 0.15s, background 0.15s;
   z-index: 50;
 }
-.gearBtn:hover { background: var(--color-surface-soft); color: var(--color-ink); }
+.gearBtn:hover {
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+}
 
 /* Modal overlay */
 .overlay {
@@ -31,18 +34,19 @@
   justify-content: center;
 }
 
+/* Modal container - 680px Expanded Width */
 .modal {
   background: var(--color-canvas);
-  padding: 24px 28px;
+  padding: 28px 32px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-hairline);
-  width: 100%;
-  max-width: 440px;
+  width: 90vw;
+  max-width: 680px;
   max-height: 85vh;
   overflow-y: auto;
   overscroll-behavior: contain;
   position: relative;
-  box-shadow: 0 8px 40px rgba(20,20,19,0.12);
+  box-shadow: 0 8px 40px rgba(20, 20, 19, 0.12);
 }
 .modal::-webkit-scrollbar {
   width: 4px;
@@ -59,8 +63,8 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .title {
@@ -74,8 +78,8 @@
 }
 
 .closeBtn {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-sm);
   background: transparent;
   border: none;
@@ -87,59 +91,118 @@
   flex-shrink: 0;
   transition: background 0.15s, color 0.15s;
 }
-.closeBtn:hover { background: var(--color-surface-soft); color: var(--color-ink); }
+.closeBtn:hover {
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+}
 
-.settingRow {
+/* Two-Column Grid Architecture */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.column {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+/* Uppercase Editorial Group Header */
+.groupLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+/* Grouped Card Container */
+.card {
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Card Items & Dividers */
+.cardItem {
+  display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 0;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--color-hairline);
+}
+
+.cardItem:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.cardItemSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.cardItemSection:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .settingInfo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
 .settingLabel {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
+  line-height: 1.35;
 }
 
+/* Optimized 13px Description for enhanced readability & zero-scroll elegance */
 .settingDescription {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--color-muted);
   line-height: 1.4;
-  max-width: 280px;
 }
 
-.settingSection {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--color-hairline);
-}
-
+/* Order Rows */
 .orderRows {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .orderRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 .orderLabel {
@@ -149,11 +212,11 @@
   color: var(--color-ink);
 }
 
-/* Toggle switch */
+/* Compact Toggle switch (36px x 20px) */
 .toggle {
-  width: 40px;
-  height: 22px;
-  border-radius: 11px;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
   background: var(--color-hairline);
   border: none;
   cursor: pointer;
@@ -162,35 +225,40 @@
   flex-shrink: 0;
   padding: 0;
 }
-.toggleOn { background: var(--color-primary); }
+.toggleOn {
+  background: var(--color-primary);
+}
 .toggleThumb {
   position: absolute;
-  top: 3px;
-  left: 3px;
+  top: 2px;
+  left: 2px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #fff;
+  background: #ffffff;
   transition: transform 0.2s;
   display: block;
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.12);
 }
-.toggleOn .toggleThumb { transform: translateX(18px); }
+.toggleOn .toggleThumb {
+  transform: translateX(16px);
+}
 
-/* Segmented control */
+/* Compact Segmented Control */
 .segmentedControl {
   display: flex;
-  background: var(--color-surface-soft);
-  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border-radius: var(--radius-sm);
   padding: 2px;
   gap: 2px;
   flex-shrink: 0;
 }
 
 .segmentOption {
-  padding: 8px 14px;
-  border-radius: calc(var(--radius-md) - 2px);
+  padding: 4px 10px;
+  border-radius: calc(var(--radius-sm) - 2px);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -200,29 +268,35 @@
   white-space: nowrap;
 }
 .segmentActive {
-  background: var(--color-surface-card);
+  background: var(--color-canvas);
   color: var(--color-ink);
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.06);
 }
 
-/* GitHub link */
+/* Card-Fitted GitHub Link */
 .githubLink {
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-decoration: none;
-  padding: 16px 8px;
+  padding: 8px 10px;
   border-radius: var(--radius-sm);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  transition: background 0.15s;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  transition: background 0.15s, border-color 0.15s;
 }
-.githubLink:hover { background: var(--color-surface-soft); }
+.githubLink:hover {
+  background: var(--color-surface-card);
+  border-color: var(--color-muted);
+}
 .githubIconWrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 /* Warning Modal for Advanced Multi-Gist */

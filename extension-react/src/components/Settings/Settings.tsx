@@ -42,188 +42,206 @@ export function Settings() {
           </button>
         </div>
 
-        {/* Setting 1: Pinned Tabs */}
-        <div className={styles.settingRow}>
-          <div className={styles.settingInfo}>
-            <span className={styles.settingLabel}>Show pinned tabs in Open Tabs</span>
-            <span className={styles.settingDescription}>When off, pinned tabs are hidden from the Open Tabs section.</span>
-          </div>
-          <button
-            className={`${styles.toggle} ${settings.showPinnedTabs ? styles.toggleOn : ''}`}
-            onClick={() => updateSettings({ showPinnedTabs: !settings.showPinnedTabs })}
-            role="switch"
-            aria-checked={settings.showPinnedTabs}
-          >
-            <span className={styles.toggleThumb} />
-          </button>
-        </div>
-
-        {/* Setting 2: PWA Apps */}
-        <div className={styles.settingRow}>
-          <div className={styles.settingInfo}>
-            <span className={styles.settingLabel}>Hide PWA app tabs in Open Tabs</span>
-            <span className={styles.settingDescription}>When on, standalone PWA application windows (like Calendar, Notion, etc.) are hidden from Open Tabs.</span>
-          </div>
-          <button
-            className={`${styles.toggle} ${settings.hidePwaTabs !== false ? styles.toggleOn : ''}`}
-            onClick={() => updateSettings({ hidePwaTabs: settings.hidePwaTabs === false })}
-            role="switch"
-            aria-checked={settings.hidePwaTabs !== false}
-          >
-            <span className={styles.toggleThumb} />
-          </button>
-        </div>
-
-        {/* Auto-close tab(s) after saving */}
-        <div className={styles.settingRow}>
-          <div className={styles.settingInfo}>
-            <span className={styles.settingLabel}>Auto-close tab(s) after saving</span>
-            <span className={styles.settingDescription}>When on, tabs are automatically closed in Chrome after being added to a session or saved for later.</span>
-          </div>
-          <button
-            className={`${styles.toggle} ${settings.autoCloseOnSave ? styles.toggleOn : ''}`}
-            onClick={() => updateSettings({ autoCloseOnSave: !settings.autoCloseOnSave })}
-            role="switch"
-            aria-checked={settings.autoCloseOnSave}
-          >
-            <span className={styles.toggleThumb} />
-          </button>
-        </div>
-
-        {/* Animate completed tabs */}
-        <div className={styles.settingRow}>
-          <div className={styles.settingInfo}>
-            <span className={styles.settingLabel}>Animate completed tab</span>
-            <span className={styles.settingDescription}>Play pen strike-through animation when marking a Save for Later tab as completed.</span>
-          </div>
-          <button
-            className={`${styles.toggle} ${settings.animateCompletedTab !== false ? styles.toggleOn : ''}`}
-            onClick={() => updateSettings({ animateCompletedTab: settings.animateCompletedTab === false })}
-            role="switch"
-            aria-checked={settings.animateCompletedTab !== false}
-          >
-            <span className={styles.toggleThumb} />
-          </button>
-        </div>
-
-        {/* Multi-Gist Management (Advanced) */}
-        <div className={styles.settingRow}>
-          <div className={styles.settingInfo}>
-            <span className={styles.settingLabel}>Multi-Gist Management (Advanced)</span>
-            <span className={styles.settingDescription}>Allows creating or switching between multiple isolated Gist databases under the same GitHub account.</span>
-          </div>
-          <button
-            className={`${styles.toggle} ${settings.allowMultiGist ? styles.toggleOn : ''}`}
-            onClick={handleToggleMultiGist}
-            role="switch"
-            aria-checked={!!settings.allowMultiGist}
-          >
-            <span className={styles.toggleThumb} />
-          </button>
-        </div>
-
-        {/* New Item Position */}
-        <div className={styles.settingSection}>
-          <span className={styles.settingLabel}>New Item Position</span>
-          <span className={styles.settingDescription}>Choose whether newly created items are added to the end or front of each list.</span>
-          
-          <div className={styles.orderRows}>
-            <div className={styles.orderRow}>
-              <span className={styles.orderLabel}>Session Cards</span>
-              <div className={styles.segmentedControl}>
-                {(['end', 'front'] as const).map(ord => (
-                  <button
-                    key={ord}
-                    className={`${styles.segmentOption} ${(settings.itemAppendOrder?.sessions || 'end') === ord ? styles.segmentActive : ''}`}
-                    onClick={() => updateSettings({
-                      itemAppendOrder: {
-                        sessions: ord,
-                        openTabs: settings.itemAppendOrder?.openTabs || 'end',
-                        saveForLater: settings.itemAppendOrder?.saveForLater || 'end',
-                      }
-                    })}
-                  >
-                    {ord === 'end' ? 'End' : 'Front'}
-                  </button>
-                ))}
+        <div className={styles.grid}>
+          {/* Left Column: Tab Visibility & Automation */}
+          <div className={styles.column}>
+            <div className={styles.groupLabel}>TAB VISIBILITY & AUTOMATION</div>
+            <div className={styles.card}>
+              {/* Item 1: Pinned Tabs */}
+              <div className={styles.cardItem}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>Show pinned tabs in Open Tabs</span>
+                  <span className={styles.settingDescription}>When off, pinned tabs are hidden from Open Tabs.</span>
+                </div>
+                <button
+                  className={`${styles.toggle} ${settings.showPinnedTabs ? styles.toggleOn : ''}`}
+                  onClick={() => updateSettings({ showPinnedTabs: !settings.showPinnedTabs })}
+                  role="switch"
+                  aria-checked={settings.showPinnedTabs}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
               </div>
-            </div>
 
-            <div className={styles.orderRow}>
-              <span className={styles.orderLabel}>Open Tabs Cards</span>
-              <div className={styles.segmentedControl}>
-                {(['end', 'front'] as const).map(ord => (
-                  <button
-                    key={ord}
-                    className={`${styles.segmentOption} ${(settings.itemAppendOrder?.openTabs || 'end') === ord ? styles.segmentActive : ''}`}
-                    onClick={() => updateSettings({
-                      itemAppendOrder: {
-                        sessions: settings.itemAppendOrder?.sessions || 'end',
-                        openTabs: ord,
-                        saveForLater: settings.itemAppendOrder?.saveForLater || 'end',
-                      }
-                    })}
-                  >
-                    {ord === 'end' ? 'End' : 'Front'}
-                  </button>
-                ))}
+              {/* Item 2: PWA Apps */}
+              <div className={styles.cardItem}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>Hide PWA app tabs in Open Tabs</span>
+                  <span className={styles.settingDescription}>When on, standalone PWA windows are hidden from Open Tabs.</span>
+                </div>
+                <button
+                  className={`${styles.toggle} ${settings.hidePwaTabs !== false ? styles.toggleOn : ''}`}
+                  onClick={() => updateSettings({ hidePwaTabs: settings.hidePwaTabs === false })}
+                  role="switch"
+                  aria-checked={settings.hidePwaTabs !== false}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
               </div>
-            </div>
 
-            <div className={styles.orderRow}>
-              <span className={styles.orderLabel}>Save for Later Tabs</span>
-              <div className={styles.segmentedControl}>
-                {(['end', 'front'] as const).map(ord => (
-                  <button
-                    key={ord}
-                    className={`${styles.segmentOption} ${(settings.itemAppendOrder?.saveForLater || 'end') === ord ? styles.segmentActive : ''}`}
-                    onClick={() => updateSettings({
-                      itemAppendOrder: {
-                        sessions: settings.itemAppendOrder?.sessions || 'end',
-                        openTabs: settings.itemAppendOrder?.openTabs || 'end',
-                        saveForLater: ord,
-                      }
-                    })}
-                  >
-                    {ord === 'end' ? 'End' : 'Front'}
-                  </button>
-                ))}
+              {/* Item 3: Auto-close tab(s) after saving */}
+              <div className={styles.cardItem}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>Auto-close tab(s) after saving</span>
+                  <span className={styles.settingDescription}>When on, tabs are auto-closed in Chrome after saving.</span>
+                </div>
+                <button
+                  className={`${styles.toggle} ${settings.autoCloseOnSave ? styles.toggleOn : ''}`}
+                  onClick={() => updateSettings({ autoCloseOnSave: !settings.autoCloseOnSave })}
+                  role="switch"
+                  aria-checked={settings.autoCloseOnSave}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
+              </div>
+
+              {/* Item 4: Animate completed tab */}
+              <div className={styles.cardItem}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>Animate completed tab</span>
+                  <span className={styles.settingDescription}>Play pen strike-through animation when completing tabs.</span>
+                </div>
+                <button
+                  className={`${styles.toggle} ${settings.animateCompletedTab !== false ? styles.toggleOn : ''}`}
+                  onClick={() => updateSettings({ animateCompletedTab: settings.animateCompletedTab === false })}
+                  role="switch"
+                  aria-checked={settings.animateCompletedTab !== false}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Setting: Theme */}
-        <div className={styles.settingRow}>
-          <div className={styles.settingInfo}>
-            <span className={styles.settingLabel}>Theme</span>
-          </div>
-          <div className={styles.segmentedControl}>
-            {(['light', 'auto', 'dark'] as const).map(t => (
-              <button
-                key={t}
-                className={`${styles.segmentOption} ${settings.theme === t ? styles.segmentActive : ''}`}
-                onClick={() => updateSettings({ theme: t })}
-              >
-                {t.charAt(0).toUpperCase() + t.slice(1)}
-              </button>
-            ))}
+          {/* Right Column: Ordering & Environment */}
+          <div className={styles.column}>
+            <div className={styles.groupLabel}>ORDERING & ENVIRONMENT</div>
+            <div className={styles.card}>
+              {/* Item 1: New Item Position */}
+              <div className={styles.cardItemSection}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>New Item Position</span>
+                  <span className={styles.settingDescription}>Placement position for newly added items.</span>
+                </div>
+                
+                <div className={styles.orderRows}>
+                  <div className={styles.orderRow}>
+                    <span className={styles.orderLabel}>Session Cards</span>
+                    <div className={styles.segmentedControl}>
+                      {(['end', 'front'] as const).map(ord => (
+                        <button
+                          key={ord}
+                          className={`${styles.segmentOption} ${(settings.itemAppendOrder?.sessions || 'end') === ord ? styles.segmentActive : ''}`}
+                          onClick={() => updateSettings({
+                            itemAppendOrder: {
+                              sessions: ord,
+                              openTabs: settings.itemAppendOrder?.openTabs || 'end',
+                              saveForLater: settings.itemAppendOrder?.saveForLater || 'end',
+                            }
+                          })}
+                        >
+                          {ord === 'end' ? 'End' : 'Front'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className={styles.orderRow}>
+                    <span className={styles.orderLabel}>Open Tabs Cards</span>
+                    <div className={styles.segmentedControl}>
+                      {(['end', 'front'] as const).map(ord => (
+                        <button
+                          key={ord}
+                          className={`${styles.segmentOption} ${(settings.itemAppendOrder?.openTabs || 'end') === ord ? styles.segmentActive : ''}`}
+                          onClick={() => updateSettings({
+                            itemAppendOrder: {
+                              sessions: settings.itemAppendOrder?.sessions || 'end',
+                              openTabs: ord,
+                              saveForLater: settings.itemAppendOrder?.saveForLater || 'end',
+                            }
+                          })}
+                        >
+                          {ord === 'end' ? 'End' : 'Front'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className={styles.orderRow}>
+                    <span className={styles.orderLabel}>Save for Later Tabs</span>
+                    <div className={styles.segmentedControl}>
+                      {(['end', 'front'] as const).map(ord => (
+                        <button
+                          key={ord}
+                          className={`${styles.segmentOption} ${(settings.itemAppendOrder?.saveForLater || 'end') === ord ? styles.segmentActive : ''}`}
+                          onClick={() => updateSettings({
+                            itemAppendOrder: {
+                              sessions: settings.itemAppendOrder?.sessions || 'end',
+                              openTabs: settings.itemAppendOrder?.openTabs || 'end',
+                              saveForLater: ord,
+                            }
+                          })}
+                        >
+                          {ord === 'end' ? 'End' : 'Front'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 2: Theme */}
+              <div className={styles.cardItem}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>Theme</span>
+                </div>
+                <div className={styles.segmentedControl}>
+                  {(['light', 'auto', 'dark'] as const).map(t => (
+                    <button
+                      key={t}
+                      className={`${styles.segmentOption} ${settings.theme === t ? styles.segmentActive : ''}`}
+                      onClick={() => updateSettings({ theme: t })}
+                    >
+                      {t.charAt(0).toUpperCase() + t.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Item 3: Multi-Gist Management */}
+              <div className={styles.cardItem}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>Multi-Gist Management</span>
+                  <span className={styles.settingDescription}>Advanced isolated Gist databases under single account.</span>
+                </div>
+                <button
+                  className={`${styles.toggle} ${settings.allowMultiGist ? styles.toggleOn : ''}`}
+                  onClick={handleToggleMultiGist}
+                  role="switch"
+                  aria-checked={!!settings.allowMultiGist}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
+              </div>
+
+              {/* Item 4: GitHub Link */}
+              <div className={styles.cardItem}>
+                <a
+                  href="https://github.com/myg321/tab-out-session"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.githubLink}
+                >
+                  <span className={styles.githubIconWrap}>
+                    <GithubLogo size={16} />
+                    <span>View on GitHub</span>
+                  </span>
+                  <ArrowUpRight size={14} />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Setting 3: GitHub */}
-        <a
-          href="https://github.com/myg321/tab-out-session"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.githubLink}
-        >
-          <span className={styles.githubIconWrap}>
-            <GithubLogo size={18} />
-            <span>View on GitHub</span>
-          </span>
-          <ArrowUpRight size={16} />
-        </a>
       </div>
     </div>,
     document.body
