@@ -57,7 +57,7 @@ export function SessionCard({ session, onRenameStart, onRenameEnd, onHeaderDragS
   const [dropTarget, setDropTarget] = useState<{ index: number; position: 'before' | 'after' } | null>(null);
   const [draggingTabIndex, setDraggingTabIndex] = useState<number | null>(null);
 
-  const [tooltip, setTooltip] = useState<{ text: string; rect: DOMRect } | null>(null);
+  const [tooltip, setTooltip] = useState<{ text: string; rect: DOMRect; fontSize?: string | number; fontWeight?: string | number } | null>(null);
   const [tabContextMenu, setTabContextMenu] = useState<{ url: string; x: number; y: number } | null>(null);
 
   // Dismiss tooltip on drag start
@@ -204,6 +204,7 @@ export function SessionCard({ session, onRenameStart, onRenameEnd, onHeaderDragS
   };
 
   const handleStartRename = () => {
+    setTooltip(null);
     setIsRenaming(true);
     onRenameStart?.();
   };
@@ -276,6 +277,7 @@ export function SessionCard({ session, onRenameStart, onRenameEnd, onHeaderDragS
         data-no-drag={isRenaming ? 'true' : undefined}
         draggable={!isRenaming}
         onDragStart={(e) => {
+          setTooltip(null);
           if (isRenaming) {
             e.preventDefault();
             return;
@@ -316,7 +318,25 @@ export function SessionCard({ session, onRenameStart, onRenameEnd, onHeaderDragS
               onKeyDown={e => { if (e.key === 'Enter') handleRenameSubmit(); if (e.key === 'Escape') { setIsRenaming(false); onRenameEnd?.(); } }}
             />
           ) : (
-            <span className={styles.name} data-drag-handle onDoubleClick={handleStartRename}>{displaySessionName(session.name)}</span>
+            <span
+              className={styles.name}
+              data-drag-handle
+              onDoubleClick={handleStartRename}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                if (el.scrollWidth > el.clientWidth) {
+                  setTooltip({
+                    text: displaySessionName(session.name),
+                    rect: el.getBoundingClientRect(),
+                    fontSize: '15px',
+                    fontWeight: 600,
+                  });
+                }
+              }}
+              onMouseLeave={() => setTooltip(null)}
+            >
+              {displaySessionName(session.name)}
+            </span>
           )}
         </div>
         <div className={styles.headerRight}>
@@ -456,7 +476,14 @@ export function SessionCard({ session, onRenameStart, onRenameEnd, onHeaderDragS
       )}
 
       {dropdownMenu}
-      {tooltip && <InstantTooltip text={tooltip.text} rect={tooltip.rect} />}
+      {tooltip && (
+        <InstantTooltip
+          text={tooltip.text}
+          rect={tooltip.rect}
+          fontSize={tooltip.fontSize}
+          fontWeight={tooltip.fontWeight}
+        />
+      )}
       {tabContextMenu && <TabContextMenu url={tabContextMenu.url} x={tabContextMenu.x} y={tabContextMenu.y} onClose={() => setTabContextMenu(null)} />}
     </div>
   );

@@ -5,9 +5,11 @@ import styles from './InstantTooltip.module.css';
 interface InstantTooltipProps {
   text: string;
   rect: DOMRect | null;
+  fontSize?: string | number;
+  fontWeight?: string | number;
 }
 
-export function InstantTooltip({ text, rect }: InstantTooltipProps) {
+export function InstantTooltip({ text, rect, fontSize, fontWeight }: InstantTooltipProps) {
   if (!text || !rect) return null;
 
   // Position directly aligned over the target element, extending to fit text
@@ -24,6 +26,8 @@ export function InstantTooltip({ text, rect }: InstantTooltipProps) {
         left: `${left}px`,
         minWidth: `${minWidth}px`,
         maxWidth: `${maxWidth}px`,
+        fontSize: fontSize !== undefined ? (typeof fontSize === 'number' ? `${fontSize}px` : fontSize) : undefined,
+        fontWeight: fontWeight !== undefined ? fontWeight : undefined,
       }}
     >
       {text}
