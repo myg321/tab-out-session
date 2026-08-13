@@ -3,12 +3,8 @@ import { createPortal } from 'react-dom';
 import { Plus, PencilSimple, ImageSquare, TrashSimple, Crop, Link } from '@phosphor-icons/react';
 import { useStore } from '../../store';
 import { CropperModal } from './CropperModal';
+import { buildFaviconSrc, buildFaviconFallbacks } from '../../utils/favicon';
 import styles from './QuickSites.module.css';
-
-function getFaviconUrl(url: string): string {
-  try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=32`; }
-  catch { return ''; }
-}
 
 function getDomain(url: string): string {
   try { return new URL(url).hostname; }
@@ -67,7 +63,7 @@ export function QuickSites() {
       const cached = faviconCache[domain];
       if (cached && cached.startsWith('data:image/')) return;
 
-      const faviconUrl = getFaviconUrl(site.url);
+      const faviconUrl = buildFaviconSrc(undefined, site.url);
       if (!faviconUrl) return;
 
       chrome.runtime.sendMessage({ type: 'FETCH_IMAGE_DATA_URL', url: faviconUrl }, (response) => {
@@ -419,7 +415,7 @@ export function QuickSites() {
         {quickSites.map((site, index) => {
           const domain = getDomain(site.url);
           const cachedIcon = faviconCache[domain];
-          const iconSrc = site.customIconUrl || cachedIcon || getFaviconUrl(site.url);
+          const iconSrc = site.customIconUrl || cachedIcon || buildFaviconSrc(undefined, site.url);
           const isCircle = site.iconShape === 'circle';
 
           return (
@@ -451,7 +447,17 @@ export function QuickSites() {
                       cacheFavicon(domain, iconSrc);
                     }
                   }}
-                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  onError={e => {
+                    const img = e.target as HTMLImageElement;
+                    const step = parseInt(img.dataset.step || '0');
+                    const fallbacks = buildFaviconFallbacks(site.url);
+                    if (step < fallbacks.length) {
+                      img.dataset.step = String(step + 1);
+                      img.src = fallbacks[step];
+                    } else {
+                      img.style.display = 'none';
+                    }
+                  }}
                 />
               </div>
               <span className={styles.label}>{site.name}</span>
