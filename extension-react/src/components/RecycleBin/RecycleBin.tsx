@@ -52,33 +52,51 @@ export function RecycleBin() {
 
       {expanded && (
         <div className={styles.list}>
-          {trash.map(session => (
-            <div key={session.id} className={styles.item}>
-              <div className={styles.itemInfo}>
-                <span className={styles.itemName}>{session.name}</span>
-                <span className={styles.itemMeta}>
-                  {session.tabs.length} tabs · Deleted {relativeTime(session.deletedAt)} · Expires in {daysUntil(session.expiresAt)} days
-                </span>
+          {trash.map(session => {
+            const daysLeft = daysUntil(session.expiresAt);
+            const isExpiringSoon = daysLeft <= 3;
+
+            return (
+              <div key={session.id} className={styles.item}>
+                <div className={styles.itemBody}>
+                  <div className={styles.itemHeader}>
+                    <span className={styles.itemName} title={session.name}>
+                      {session.name}
+                    </span>
+                    <span className={styles.tabBadge}>
+                      {session.tabs.length} {session.tabs.length === 1 ? 'tab' : 'tabs'}
+                    </span>
+                  </div>
+
+                  <div className={styles.itemMeta}>
+                    <span>Deleted {relativeTime(session.deletedAt)}</span>
+                    <span className={styles.metaDot}>·</span>
+                    <span className={isExpiringSoon ? styles.expiringSoon : undefined}>
+                      Expires in {daysLeft}d
+                    </span>
+                  </div>
+                </div>
+
+                <div className={styles.itemActions}>
+                  <button
+                    className={styles.restoreBtn}
+                    onClick={() => restoreSession(session.id)}
+                    title="Restore session"
+                  >
+                    <ArrowUUpLeft size={13} />
+                    <span>Restore</span>
+                  </button>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => permanentlyDeleteSession(session.id)}
+                    title="Delete permanently"
+                  >
+                    <Trash size={13} />
+                  </button>
+                </div>
               </div>
-              <div className={styles.itemActions}>
-                <button
-                  className={styles.restoreBtn}
-                  onClick={() => restoreSession(session.id)}
-                  title="Restore session"
-                >
-                  <ArrowUUpLeft size={14} />
-                  <span>Restore</span>
-                </button>
-                <button
-                  className={styles.deleteBtn}
-                  onClick={() => permanentlyDeleteSession(session.id)}
-                  title="Delete permanently"
-                >
-                  <Trash size={14} />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
